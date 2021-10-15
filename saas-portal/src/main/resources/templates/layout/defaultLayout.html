@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- 怨듯넻 Header -->
+<th:block th:replace="fragments/commonHeader :: commonHeader"></th:block>
+<!-- <body oncontextmenu="return false" ondragstart="return false"> -->
+<body ondragstart="return false">
+	<div id="wrap" >
+       <header class="clearfix">
+		    <div class="container">
+		        <div class="mo_btn">
+		        	<a th:href="@{/main}"><img src="img/logo.png"/></a>
+		        </div>
+		        <div class="logo"><a href=""><img src="img/logo.png" /></a></div>
+		        <ul class="pc_menu">
+		            <li><a href="#service">서비스 소개</a></li>
+		            <li><a href="#price">도입 비용</a></li>
+		        </ul>
+		        <div class="mo_menu">
+		            <div class="close_btn"><img src="img/close_btn.png" /></div>
+		            <ul class="">
+		                <li><a href="#service">서비스 소개</a></li>
+		                <li><a href="#price">도입 비용</a></li>
+		            </ul>
+		        </div>
+		        <ul class="user">
+		            <li><button class="btn whiteBtn" id="loginPage">로그인</button></li>
+                    <li><button class="btn purpleBtn" id="joinMember">회원가입</button></li>
+		        </ul>
+		    </div>
+		</header>
+       <th:block layout:fragment="content"></th:block>
+	</div>
+	<!-- 怨듯넻 Footer
+	<th:block th:replace="fragments/commonFooter :: commonFooter"></th:block> -->
+</body>
+</html>

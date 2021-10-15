@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="layout/defaultLayout">
+ 
+<!-- start: HEAD -->
+
+<head>
+    
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#joinMember").click(function(){
+				window.location="/joinMember";
+			});
+			
+			$("#loginPage").click(function(){
+				window.location="/login";
+			});
+		});
+	</script>
+</head>
+<!-- end: HEAD -->
+
+<!-- start: BODY-->
+
+<body>
+    <th:block layout:fragment="content">
+        <section>
+            <div class="mainVisual">
+                <div class="container">
+                    <div class="visualText">
+                        <h1>누구나 쉽고 편리하게.<br>대면/비대면 통합 지능형 학습관리시스템<br>IT'Z LXP</h1>
+                        <p>클라우드 기반의 다양한 온라인 학습 도구와<br>대면/비대면 학습을 통합 관리할 수 있는 학습 솔루션을 지금 경험해보세요.</p>
+                    </div>
+                    <div class="visualImg"><img src="img/visual_con.png" /></div>
+                </div>
+            </div>
+            <div class="middleCon" id="service">
+                <div class="container">
+                    <h1 class="middleTitle">IT'Z LXP를 선택해야하는 이유</h1>
+                    <ul class="middleBox clearfix">
+                        <li>
+                            <div class=""><img src="img/middle_01.png"></div>
+                            <h2>대면/비대면 통합 학습 관리</h2>
+                            <p>화상/동영상강의/과제 등 클라우드 기반<br>학사 시스템과 연동하여 시간표 생성</p>
+                        </li>
+                        <li>
+                            <div class=""><img src="img/middle_02.png"></div>
+                            <h2>빅데이터 및 AI 학생 분석 모듈</h2>
+                            <p>학습활동 데이터를 수집/분석하여<br>학생들의 현재 역량과 미래 역량 예측</p>
+                        </li>
+                        <li>
+                            <div class=""><img src="img/middle_03.png"></div>
+                            <h2>지능형 중도탈락 위험 감지</h2>
+                            <p>AI 학습 분석 모델을 통한<br>비대면 환경하에 학생관리를 위한 기능</p>
+                        </li>
+                        <li>
+                            <div class=""><img src="img/middle_04.png"></div>
+                            <h2>MSA 기반 모듈식 기능 확장</h2>
+                            <p>지속적 업데이트를 통한 다양한 학습도구 제공<br>원하는 기능만 선택하여 구독</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottomCon" id="price">
+                <div class="container">
+                    <h1 class="bottomTitle">도입 비용 안내</h1>
+                    <ul class="bottomBox clearfix">
+                        <li>
+                            <div class="priceTitle">
+                                <h2>베이직</h2>
+                                <p>비대면 학습 진행을 위한 LMS<br>&nbsp;</p>
+                            </div>
+                            <div class="price">
+                                <p><b>990,000</b> <span>/ 월</span></p>
+                            </div>
+                            <div class="discount">
+                                <span class="beforePrice">11,880,000원</span>
+                                <p><b>9,900,000 원</b> / 년</p>
+                                <span class="optionText">(연간 결제시 할인 적용)</span>
+                            </div>
+                            <div class="priceBtn">
+                                <button class="btn whiteBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
+                            </div>
+                        </li>
+                        <li class="on">
+                            <div class="priceRibbon">
+                                <div class="ribbonText">추천</div>
+                            </div>
+                            <div class="priceTitle">
+                                <h2>스탠다드</h2>
+                                <p>대면/비대면 학습 통합관리<br>&nbsp;</p>
+                            </div>
+                            <div class="price">
+                                <p><b>1,490,000</b> <span>/ 월</span></p>
+                            </div>
+                            <div class="discount">
+                                <span class="beforePrice">17,880,000원</span>
+                                <p><b>14,900,000 원</b> / 년</p>
+                                <span class="optionText">(연간 결제시 할인 적용)</span>
+                            </div>
+                            <div class="priceBtn">
+                                <button class="btn purpleBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="priceTitle">
+                                <h2>프리미엄</h2>
+                                <p>대면/비대면 학습 통합관리<br>(+지능형 중도 탈락 위험 감지)</p>
+                            </div>
+                            <div class="price">
+                                <p><b>1,990,000</b> <span>/ 월</span></p>
+                            </div>
+                            <div class="discount">
+                                <span class="beforePrice">23,880,000원</span>
+                                <p><b>19,900,000 원</b> / 년</p>
+                                <span class="optionText">(연간 결제시 할인 적용)</span>
+                            </div>
+                            <div class="priceBtn">
+                                <button class="btn whiteBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </section>
+        <!--e : section-->
+
+       	<div class="pageTop"><a href=""><img src="img/arrow_img.png"></a></div>
+       
+        <div class="overlay"></div>
+            
+        <div class="modal fade joinPop" tabindex="-1" role="dialog" aria-labelledby="joinPop" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="joinPopTitle">알림</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>서비스를 이용하시려면 회원가입이 필요합니다.<br>회원가입을 진행하시겠습니까?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn whiteBtn" data-dismiss="modal">취소</button>
+                        <button type="button" class="btn purpleBtn">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </th:block>
+</body>
+<!-- end: BODY-->
+
+</html>

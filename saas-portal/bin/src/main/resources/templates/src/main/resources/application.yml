@@ -1,0 +1,121 @@
+## Server 설정
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: -1
+---
+spring:
+  profiles:
+    active: local
+---
+spring:
+  profiles:
+    group:
+      "local": "local,common"      
+---
+spring:
+  profiles:
+    group:
+      "dev":  "dev,common"
+---
+spring:
+  profiles:
+    group:
+      "prod": "prod,common"    
+  
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "local" 
+  datasource:
+    url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: itaz9045
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "dev" 
+  datasource:
+    url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: itaz9045
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "prod" 
+  datasource:
+    url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: itaz9045
+
+---  
+spring:
+  config:
+    activate:
+      on-profile: "common"    
+  application:
+    name: user-service
+  jpa:
+    open-in-view: false #osiv 웹요청이 완료될때까지 영속성을 가짐 (성능상 안 좋음)
+    generate-ddl: false #Initialize the schema on startup. 배포시에는
+    show-sql: true    #console화면에 sql문을 보여준다
+    hibernate:
+      ddl-auto: none  #create - 서버 시작시마다 DB초기화, update - 수정사항만 DB에 반영, none - DB에 아무런 반영을 하지 않음.
+    properties:
+      hibernate:
+        format_sql: true #console화면의 sql문을 보기 좋게 한다.
+
+    
+mybatis:
+  type-aliases-package: kr.itaz.lms.**.vo
+  configuration:
+    multiple-result-sets-enabled: false
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: varchar
+    default-fetch-size: 500
+  mapper-locations: mybatis/mapper/**/*.xml, mybatis/mapper/**/**/*.xml
+    
+logging:
+  level:
+    kr.itaz.userservice: debug 
+    org.hibernate.type: trace #sql문의 bind 값을 보여준다.
+
+#사용자 메시지      
+greeting:
+  message : Welcome to the Simple User-Service
+ 
+token:
+  expiration:
+    time: 86400000 #token 만료시간
+secret:  itazUserToken #token 암복호화 키
+
+---
+spring: 
+  thymeleaf: 
+    prefix: classpath:templates/
+    suffix: .html
+    mode: HTML5
+    ## 캐시 설정 비활성화 개발 시 false / 운영 시 true
+    cache: false
+    check-template-location: true
+    
+    
+## Mybatis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: kr.itaz.lms.**.vo
+  mapper-locations: mybatis/mapper/**/*.xml, mybatis/mapper/**/**/*.xml

@@ -1,0 +1,95 @@
+/*mainVisual*/
+.mainVisual {background: url(../img/visual_img.png) no-repeat center; height: 560px; background-size: cover;}
+.mainVisual .container {position: relative;}
+.mainVisual .visualText {padding-top: 200px;}
+.mainVisual .visualText h1 {font-size: 40px; font-weight: 700; letter-spacing: -3px;}
+.mainVisual .visualText p {font-size: 20px; letter-spacing: -2px; padding-top: 15px;}
+.mainVisual .visualImg {position: absolute; top: 160px; right: -100px;}
+
+
+/*middleCon*/
+.middleCon {padding: 50px 0; text-align: center;}
+.middleCon .middleTitle {position: relative; font-weight: 700; font-size: 45px; letter-spacing: -2px;}
+.middleCon .middleTitle:after {content: ""; position: absolute; left: 50%; bottom: 0; margin-left: -60px; width: 90px; height: 30px; background: #acadff; z-index: -1;}
+.middleCon .middleBox {margin-top: 100px; padding: 0;}
+.middleCon .middleBox li {width: 25%; float: left;}
+.middleCon .middleBox li h2 {font-size: 20px; margin-top: 40px; margin-bottom: 20px;} 
+
+
+/*bottomCon*/
+.bottomCon {padding: 50px 0; text-align: center; background: #f8f8f8;}
+.bottomCon .bottomTitle {font-weight: 700; font-size: 45px; letter-spacing: -2px;}
+.bottomCon .bottomBox {margin-top: 50px; padding: 0;}
+.bottomCon .bottomBox li {width: 32%; margin-right: 2%; border: 1px solid #ddd; background: #fff; box-shadow: 0 0 30px 0 rgba(0,0,0,0.1); border-radius: 20px; float: left; padding: 40px 20px;}
+.bottomCon .bottomBox li:last-child {margin-right: 0;}
+.bottomCon .bottomBox li .priceTitle h2 {font-size: 32px; margin-top: 0;}
+.bottomCon .bottomBox li .priceTitle p {font-size: 17px;}
+.bottomCon .bottomBox li .price {margin: 20px 0;}
+.bottomCon .bottomBox li .price p b {font-size: 40px; letter-spacing: -3px;}
+.bottomCon .bottomBox li .discount {letter-spacing: -2px;}
+.bottomCon .bottomBox li .discount .beforePrice {font-size: 18px; color: #a0a0a0; text-decoration: line-through;}
+.bottomCon .bottomBox li .discount p {font-size: 23px; margin: 0;}
+.bottomCon .bottomBox li .discount p b {font-size: 26px; color: #452aff;}
+.bottomCon .bottomBox li .discount .optionText {color: #a0a0a0;}
+.bottomCon .bottomBox li .priceBtn {margin-top: 30px;}
+.bottomCon .bottomBox li .priceBtn button {font-size: 18px;}
+.bottomCon .bottomBox li .priceBtn .whiteBtn:hover {background-color: #452aff; color: #fff; border: 1px solid #452aff;}
+.bottomCon .bottomBox li .priceBtn .purpleBtn:hover {color: #fff;}
+.bottomCon .bottomBox li.on {position: relative; border: 1px solid #452aff; background: #f4f2ff;}
+.bottomCon .bottomBox li .priceRibbon {position: absolute; top: 0; right: 0; -webkit-transform: rotate(90deg); -ms-transform: rotate(90deg); transform: rotate(90deg); width: 230px; overflow: hidden; height: 230px;}
+.bottomCon .bottomBox li .priceRibbon .ribbonText {background: #452aff; margin-top: 40px; padding: 8px 0; font-size: 18px; transform: translateY(-50%) translateX(-50%) translateX(36px) rotate(-47deg); color: #fff;}
+
+
+/*responsive*/
+@media all and (max-width: 1500px) {
+    .mainVisual {height: 550px;}
+    .mainVisual .visualImg {right: 0;}
+    .mainVisual .visualImg img {width: 450px;}
+}
+
+@media all and (max-width: 1200px) {
+    .mainVisual .visualText h1,
+    .middleCon .middleTitle,
+    .bottomCon .bottomTitle {font-size: 36px;}
+    .mainVisual .visualText {padding-left: 50px;}
+    .middleCon,
+    .bottomCon {padding: 70px 0;}
+    .middleCon .middleTitle:after {width: 70px; height: 20px; margin-left: -49px;}
+    .middleCon .middleBox li {width: 50%; margin-bottom: 3%;}
+}
+
+@media all and (max-width: 1050px) {
+    .mainVisual {height: auto; text-align: center;}
+    .mainVisual .visualText {padding-left: 0; padding-top: 150px;}
+    .mainVisual .visualImg {position: relative; top: 0; right: auto; padding: 40px 0 80px;}
+}
+
+@media all and (max-width: 768px) {
+    .bottomCon .bottomBox {margin-top: 50px;}
+    .bottomCon .bottomBox li {width: 100%; margin-right: 0; margin-bottom: 3%;}
+}
+
+@media all and (max-width: 600px) {
+    .middleCon .middleBox li {width: 100%;}
+}
+
+@media all and (max-width: 500px) {
+    .mainVisual .visualText h1,
+    .middleCon .middleTitle,
+    .bottomCon .bottomTitle {font-size: 26px;}
+    .mainVisual .visualText {padding-top: 110px;}
+    .mainVisual .visualText p {font-size: 16px;}
+    .mainVisual .visualImg {padding: 20px 0 40px;}
+    .mainVisual .visualImg img {width: 300px;}
+    
+    .middleCon,
+    .bottomCon {padding: 50px 0 0;}
+    .middleCon .middleBox {margin-top: 50px;}
+    .middleCon .middleBox li {margin-bottom: 9%;}
+    .middleCon .middleBox li img {width: 80px;}
+    .middleCon .middleBox li h2 {font-size: 18px; margin-top: 20px; margin-bottom: 10px;}
+    .middleCon .middleBox li p {font-size: 14px;}
+    
+    .bottomCon .bottomBox li .priceTitle p,
+    .bottomCon .bottomBox li .price {margin: 0;}
+}

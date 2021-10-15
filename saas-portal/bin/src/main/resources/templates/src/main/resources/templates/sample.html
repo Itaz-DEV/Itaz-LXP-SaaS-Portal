@@ -1,0 +1,19 @@
+ <!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Thymeleaf 예제</title>
+</head>
+<body>
+<h1>Thymeleaf 예제</h1>
+	 
+	<table>
+		<tr th:each="sample : ${sampleList}">
+			<td th:text="${sample.tenantId}"></td>
+		</tr>
+	</table>
+
+
+</body>
+</html>

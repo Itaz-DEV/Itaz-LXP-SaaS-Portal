@@ -1,0 +1,38 @@
+.subContainer {width: 100%; max-width: 600px; margin: 0 auto;}
+
+header {border-bottom: 1px solid #ddd;}
+
+/*subVisual*/
+.subVisual {text-align: center; border-bottom: 1px solid #ddd; padding: 160px 0 100px;}
+.subVisual h1 {font-size: 45px; font-weight: 700;}
+
+/*subWrap*/
+.subWrap {padding: 50px 0;}
+.subWrap .btnWrap button {width: 100%; border-radius: 0; margin: 8px 0; font-size: 16px; padding: 15px 0;}
+
+.subWrap .selectList ul {border: 1px solid #ddd; padding: 0;}
+.subWrap .selectList ul li {border-bottom: 1px solid #ddd; padding: 25px 20px; margin: 0;}
+.subWrap .selectList ul li:last-child {border-bottom: 0;}
+.subWrap .selectList ul li p {position: absolute; top: 25px; right: 25px; margin: 0; text-align: right;}
+.subWrap .selectList ul li p.lineTwo {top: 15px;}
+.subWrap .selectList ul li p.lineTwo .fake {text-decoration: line-through; color: #999; font-size: 14px;}
+
+.subWrap .charge ul {padding: 20px 0 0 0;}
+.subWrap .charge ul li {display: inline-block; width: 100%; padding: 0 20px;}
+.subWrap .charge ul li p {float: left;}
+.subWrap .charge ul li span {float: right;}
+.subWrap .charge ul li.realPrice {font-size: 18px; border-top: 1px solid #ddd; padding-top: 20px; font-weight: 500;}
+.subWrap .charge .btn-group {width: 100%; margin: 25px 0 10px;}
+.subWrap .charge .btn-group .btn {width: 50%; border-radius: 0; background: #fff; border: 1px solid #ddd; font-size: 16px; color: #616161; padding: 16px 0 13px 0;}
+
+/*responsive*/
+@media all and (max-width: 600px) {
+    .subContainer {padding: 0 10px;}
+}
+
+@media all and (max-width: 500px) {
+    .subVisual {padding: 130px 0 50px;}
+    .subVisual h1 {font-size: 36px;}
+    
+    .subWrap .charge .btn-group .btn {font-size: 14px;}
+}

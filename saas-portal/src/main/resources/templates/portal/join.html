@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="layout/defaultLayout">
+
+<!-- start: HEAD -->
+
+<head>
+ 
+
+</head>
+<!-- end: HEAD -->
+
+<!-- start: BODY-->
+
+<body>
+    <div id="wrap">
+        <header class="clearfix">
+            <div class="container">
+                <div class="logo"><img src="img/logo.png" /></div>
+                <ul class="menu">
+                    <li><a href="main.html">서비스 소개</a></li>
+                    <li><a href="main.html">도입 비용</a></li>
+                </ul>
+                <ul class="user">
+                    <li><button class="btn whiteBtn">로그인</button></li>
+                    <li><button class="btn purpleBtn">회원가입</button></li>
+                </ul>
+            </div>
+        </header>
+        <th:block layout:fragment="content">
+        <div class="subVisual">
+            <h1>회원가입</h1>
+        </div>
+        <div class="subWrap">
+            <div class="subContainer">
+                <form>
+                    <div class="form-group">
+                        <label for="">테넌트 분류</label>
+                        <select class="form-control">
+                            <option>테넌트 분류를 선택해주세요.</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">테넌트명</label>
+                        <input type="" class="form-control" id="" placeholder="테넌트명을 입력하세요.">
+                    </div>
+                    <div class="form-group check-form">
+                        <label for="">테넌트 고유 아이디</label>
+                        <input type="" class="form-control" id="" placeholder="">
+                        <button type="" class="btn purpleBtn">인증번호 발송</button>
+                    </div>
+                    <div class="form-group check-form">
+                        <input type="" class="form-control" id="" placeholder="">
+                        <button type="" class="btn purpleBtn">인증번호 확인</button>
+                    </div>
+                    <div class="btnWrap">
+                        <button type="" class="btn purpleBtn">회원가입</button>
+                        <button type="" class="btn blackBtn">취소</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        </th:block>
+        <div class="pageTop"><a href="#"><img src="img/arrow_img.png"></a></div>
+    </div>
+</body>
+<!-- end: BODY-->
+
+</html>
