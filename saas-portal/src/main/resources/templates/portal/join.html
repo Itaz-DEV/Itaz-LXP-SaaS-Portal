@@ -1,75 +1,142 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="ko"
+	xmlns="http://www.w3.org/1999/xhtml"
  	xmlns:th="http://www.thymeleaf.org"
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	layout:decorator="layout/defaultLayout">
-
 <!-- start: HEAD -->
-
 <head>
- 
+    
+	<script type="text/javascript">
+		$(document).ready(function(){
 
+			// 정규표현식을 정의합니다.
+			function email_check( email ) {
+			    
+			    var regex=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+			    return (email != '' && email != 'undefined' && regex.test(email));
+
+			}
+			
+			//아이디(이메일) 중복 체크
+			$("#checkDuplicate").click(function(){
+				if(!$.trim($("#userId").val())){
+					alert("아이디를 입력해주세요.");
+					return false;
+				}
+				
+				$.ajax({
+					url: "/join/checkDuplicateEmail",
+					method: "GET",
+					dataType: "json",
+					data : {"userId":$("#userId").val()},
+					success: function (data) {
+						if(data > 0){
+							alert("이미 사용중인 아이디입니다.");
+							return false;
+						}else{
+							alert("사용할 수 있는 아이디입니다.");
+							$("#duplicateYn").val("Y");
+						}
+					}
+				});
+			});
+			
+			$("#userId").change(function() {
+				 $("#duplicateYn").val("N");
+		    });
+			 
+			// 회워가입 
+			$("#joinMemberProcess").click(function(){
+				if(!$.trim($("#userId").val())){
+					alert("아이디를 입력해주세요.");
+					return false;
+				}
+				 
+				
+				if(email_check($("#userId").val()) == false){
+					alert("이메일 형식이 아닙니다.");
+					return false;
+				}
+				
+				if($("#duplicateYn").val() == "N"){
+					alert("아이디 중복확인을 해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#password").val())){
+					alert("패스워드를 입력해주세요.");
+					return false;
+				}
+
+				if(!$.trim($("#passwordConfirm").val())){
+					alert("패스워드 확인을 입력해주세요.");
+					return false;
+				}
+				
+				if($("#password").val() != $("#passwordConfirm").val()){
+					alert("패스워드가 맞지 않습니다. \n확인 후 다시 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#userName").val())){
+					alert("이름을 입력해주세요.");
+					return false;
+				}
+				
+				$ ("form[name=joinForm]").attr("action", "/join/joinMember").submit();
+			});
+			
+			//취소시 메인이동
+			$("#moveMain").click(function(){
+				window.location="/main";
+			});
+		});
+	</script>
 </head>
 <!-- end: HEAD -->
-
 <!-- start: BODY-->
-
 <body>
-    <div id="wrap">
-        <header class="clearfix">
-            <div class="container">
-                <div class="logo"><img src="img/logo.png" /></div>
-                <ul class="menu">
-                    <li><a href="main.html">서비스 소개</a></li>
-                    <li><a href="main.html">도입 비용</a></li>
-                </ul>
-                <ul class="user">
-                    <li><button class="btn whiteBtn">로그인</button></li>
-                    <li><button class="btn purpleBtn">회원가입</button></li>
-                </ul>
+    <th:block layout:fragment="content">
+        <section>
+            <div class="subVisual">
+                <h1>회원가입</h1>
             </div>
-        </header>
-        <th:block layout:fragment="content">
-        <div class="subVisual">
-            <h1>회원가입</h1>
-        </div>
-        <div class="subWrap">
-            <div class="subContainer">
-                <form>
-                    <div class="form-group">
-                        <label for="">테넌트 분류</label>
-                        <select class="form-control">
-                            <option>테넌트 분류를 선택해주세요.</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">테넌트명</label>
-                        <input type="" class="form-control" id="" placeholder="테넌트명을 입력하세요.">
-                    </div>
-                    <div class="form-group check-form">
-                        <label for="">테넌트 고유 아이디</label>
-                        <input type="" class="form-control" id="" placeholder="">
-                        <button type="" class="btn purpleBtn">인증번호 발송</button>
-                    </div>
-                    <div class="form-group check-form">
-                        <input type="" class="form-control" id="" placeholder="">
-                        <button type="" class="btn purpleBtn">인증번호 확인</button>
-                    </div>
-                    <div class="btnWrap">
-                        <button type="" class="btn purpleBtn">회원가입</button>
-                        <button type="" class="btn blackBtn">취소</button>
-                    </div>
-
-                </form>
+            <div class="subWrap">
+                <div class="subContainer">
+                    <form name="joinForm" method="POST">
+                    	<input type="hidden" name="duplicateYn" id="duplicateYn" value="N"/>
+                         <div class="form-group check-form" id="userIdArea">
+                            <label for="userId">아이디(이메일)</label>
+                            <input type="text" class="form-control" id="userId" name="userId" placeholder="이메일을 입력하세요.">
+                            <button type="button" class="btn purpleBtn" id="checkDuplicate">중복확인</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">패스워드</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="패스워드를 입력하세요.">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordConfirm">패스워드 확인</label>
+                            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="패스워드를 입력하세요.">
+                        </div>
+                           <div class="form-group">
+                            <label for="userId">이름</label>
+                            <input type="text" class="form-control" id="userName" name="userName" placeholder="성명 입력하세요.">
+                        </div>
+                        <div class="form-group">
+                            <label for="telNo">휴대폰번호</label>
+                            <input type="text" class="form-control" id="telNo" name="telNo" placeholder="전화번호를 입력하세요.">
+                        </div>
+                        <div class="btnWrap">
+                            <button type="button" class="btn purpleBtn" id="joinMemberProcess">회원가입</button>
+                            <button type="button" class="btn blackBtn" id="moveMain">취소</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-        </th:block>
-        <div class="pageTop"><a href="#"><img src="img/arrow_img.png"></a></div>
-    </div>
+        </section>
+        <!--e: section-->
+    </th:block>
 </body>
 <!-- end: BODY-->
 

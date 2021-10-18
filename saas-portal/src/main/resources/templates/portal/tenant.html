@@ -1,63 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko"
+	xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="layout/defaultLayout">
 
 <!-- start: HEAD -->
 
 <head>
-    <title>IT'Z LXP</title>
-    <!-- start: META -->
-    <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta content="" name="description" />
-    <meta content="" name="author" />
-    <!-- end: META -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
 
-    <!-- start: CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/sub.css" />
-    <!-- end: CSS -->
+			//아이디(이메일) 중복 체크
+			$("#tenantCl").change(function(){
+				$.ajax({
+					url: "/tenantDetailClList",
+					method: "GET",
+					dataType: "json",
+					data : {"tenantCl":$("#tenantCl").val()},
+					success: function (cdoeList) {
+						let html='<option value="">테넌트 상세 분류를 선택해주세요.</option>';
+						$.each(cdoeList, function(i, data){
+							html += '<option value='+ data.code +'>' + data.codeNmKor + "</option>"; 
+						});
+						$("#tenantDtlCl").empty().append(html);
+					}
+				});
+			});
+			
+			//우편번호 검색
+			$("#searchPostCode").click(function(){
+				new daum.Postcode({
+					oncomplete: function(data) {
+						$('input[name=zipNo]').val(data.zonecode);
+						$('input[name=address]').val(data.address + " ");
+						$('input[name=address]').focus();
+					}
+				}).open();
+			});
+		});
+		
 
-    <!-- start: JS-->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/sub.js"></script>
-    <!-- end: JS-->
-
+	</script>
 </head>
 <!-- end: HEAD -->
 
 <!-- start: BODY-->
 
 <body>
-    <div id="wrap">
-        <!--s : header-->
-        <header class="clearfix">
-            <div class="container">
-                <div class="mo_btn"><img src="img/mo_btn.png" /></div>
-                <div class="logo"><a href=""><img src="img/logo.png" /></a></div>
-                <ul class="pc_menu">
-                    <li><a href="#service">서비스 소개</a></li>
-                    <li><a href="#price">도입 비용</a></li>
-                </ul>
-                <div class="mo_menu">
-                    <div class="close_btn"><img src="img/close_btn.png" /></div>
-                    <ul class="">
-                        <li><a href="#service">서비스 소개</a></li>
-                        <li><a href="#price">도입 비용</a></li>
-                    </ul>
-                </div>
-                <ul class="user">
-                    <li><button class="btn whiteBtn">로그인</button></li>
-                    <li><button class="btn purpleBtn">회원가입</button></li>
-                </ul>
-            </div>
-        </header>
-        <!--e : header-->
+    <th:block layout:fragment="content">
         <!--s: section-->
         <section>
             <div class="subVisual">
@@ -67,25 +59,67 @@
                 <div class="subContainer">
                     <form>
                         <div class="form-group">
-                            <label for="">기관 주소</label>
-                            <input type="" class="form-control" id="" placeholder="">
+                            <label for="">테넌트 분류</label>
+                            <select class="form-control" name="tenantCl" id="tenantCl">
+                                <option>테넌트 분류를 선택해주세요.</option>
+                            	<option  th:each="item : ${tenantClList}" th:value="${item.code}" th:text="${item.codeNmKor}"></option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="">최고 관리자명</label>
-                            <input type="" class="form-control" id="" placeholder="테넌트명을 입력하세요.">
+                            <label for="">테넌트 상세 분류</label>
+                            <select class="form-control" name="tenantDtlCl" id="tenantDtlCl">
+                                <option>테넌트 상세 분류를 선택해주세요.</option>
+                            	<option  th:each="item : ${tenantDivList}" th:value="${item.code}" th:text="${item.codeNmKor}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 국문명</label>
+                            <input type="text" class="form-control" id="tenantNmKor">
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 영문명</label>
+                            <input type="text" class="form-control" id="tenantNmKor">
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 대표 아이디 ( 테넌트 서브 도메인 사용 )</label>
+                            <input type="text" class="form-control" id="tenantNmKor">
                         </div>
                         <div class="form-group check-form">
+                            <label for="">테넌트 주소</label>
+                            <input type="text" class="form-control" style="width:200px;" id="zipNo" name="zipNo">
+                            <button type="button" class="btn purpleBtn" id="searchPostCode">주소찾기</button>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="">대표 전화번호</label>
+                            <input type="text" class="form-control" id="reprsntTelNo" name="reprsntTelNo">
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 담당자 명</label>
+                            <input type="text" class="form-control" id="chargerNm" name="chargerNm">
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 담당자 ID</label>
+                            <input type="text" class="form-control" id="chargerId" name="chargerId">
+                        </div>
+                        <div class="form-group">
+                            <label for="">테넌트 담당자 휴대전화번호</label>
+                            <input type="text" class="form-control" id="chargerMobile" name="chargerMobile">
+                        </div>
+                       <!-- <div class="form-group check-form">
                             <label for="">휴대폰 번호</label>
-                            <input type="" class="form-control" id="" placeholder="">
-                            <button type="" class="btn purpleBtn">인증번호 발송</button>
+                            <input type="text" class="form-control" id="" placeholder="">
+                            <button type="button" class="btn purpleBtn">인증번호 발송</button>
                         </div>
                         <div class="form-group check-form">
-                            <input type="" class="form-control" id="" placeholder="">
+                            <input type="text" class="form-control" id="" placeholder="">
                             <button type="" class="btn purpleBtn">인증번호 확인</button>
-                        </div>
+                        </div> -->
                         <div class="btnWrap">
-                            <button type="" class="btn purpleBtn">테넌트 생성</button>
-                            <button type="" class="btn blackBtn">취소</button>
+                            <button type="button" class="btn purpleBtn" id="saveBtn">테넌트 생성</button>
+                            <button type="button" class="btn blackBtn" id="cancalBtn">취소</button>
                         </div>
 
                     </form>
@@ -94,9 +128,7 @@
         </section>
         <!--e: section-->
 
-        <div class="pageTop"><a href="#"><img src="img/arrow_img.png"></a></div>
-
-    </div>
+ 	</th:block>
 </body>
 <!-- end: BODY-->
 

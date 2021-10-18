@@ -8,30 +8,42 @@
 <!-- <body oncontextmenu="return false" ondragstart="return false"> -->
 <body ondragstart="return false">
 	<div id="wrap" >
-       <header class="clearfix">
+       	<header class="clearfix">
 		    <div class="container">
-		        <div class="mo_btn">
-		        	<a th:href="@{/main}"><img src="img/logo.png"/></a>
-		        </div>
-		        <div class="logo"><a href=""><img src="img/logo.png" /></a></div>
+		        <div class="logo"><a th:href="@{/main}"><img src="/img/logo.png" /></a></div>
 		        <ul class="pc_menu">
 		            <li><a href="#service">서비스 소개</a></li>
 		            <li><a href="#price">도입 비용</a></li>
 		        </ul>
 		        <div class="mo_menu">
-		            <div class="close_btn"><img src="img/close_btn.png" /></div>
+		            <div class="close_btn"><img src="/img/close_btn.png" /></div>
 		            <ul class="">
 		                <li><a href="#service">서비스 소개</a></li>
 		                <li><a href="#price">도입 비용</a></li>
 		            </ul>
 		        </div>
-		        <ul class="user">
-		            <li><button class="btn whiteBtn" id="loginPage">로그인</button></li>
-                    <li><button class="btn purpleBtn" id="joinMember">회원가입</button></li>
-		        </ul>
+		        <th:block th:if="${session.isEmpty()}">
+			        <ul class="user">
+				  		<li><button class="btn whiteBtn" id="loginPage">로그인</button></li>
+	                    <li><button class="btn purpleBtn" id="joinMember">회원가입</button></li>
+			        </ul>
+		         </th:block>
+		         <th:block th:if="${!session.isEmpty()}">
+		         	<ul class="user">
+				  		<li><button class="btn whiteBtn" id="logoutBtn">로그아웃</button></li>
+	                    <li><button class="btn purpleBtn" id="mypageBtn">마이페이지</button></li>
+			        </ul>
+		         </th:block>
 		    </div>
 		</header>
-       <th:block layout:fragment="content"></th:block>
+		
+       	<th:block layout:fragment="content"></th:block>
+       	
+       	<form action="/logout" method="get" name="defaultForm" id="defaultForm"> 
+       	</form>
+		
+		<div class="pageTop"><a href="#"><img src="/img/arrow_img.png"></a></div>
+		
 	</div>
 	<!-- 怨듯넻 Footer
 	<th:block th:replace="fragments/commonFooter :: commonFooter"></th:block> -->

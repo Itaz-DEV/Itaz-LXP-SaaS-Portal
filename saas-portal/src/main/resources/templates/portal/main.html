@@ -1,29 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="ko"
+	xmlns="http://www.w3.org/1999/xhtml"
  	xmlns:th="http://www.thymeleaf.org"
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	layout:decorator="layout/defaultLayout">
- 
 <!-- start: HEAD -->
-
 <head>
     
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#joinMember").click(function(){
-				window.location="/joinMember";
-			});
-			
-			$("#loginPage").click(function(){
-				window.location="/login";
-			});
-		});
-	</script>
 </head>
 <!-- end: HEAD -->
-
 <!-- start: BODY-->
-
 <body>
     <th:block layout:fragment="content">
         <section>
@@ -128,8 +114,6 @@
         </section>
         <!--e : section-->
 
-       	<div class="pageTop"><a href=""><img src="img/arrow_img.png"></a></div>
-       
         <div class="overlay"></div>
             
         <div class="modal fade joinPop" tabindex="-1" role="dialog" aria-labelledby="joinPop" aria-hidden="true">
@@ -150,7 +134,6 @@
             </div>
         </div>
 
-        
     </th:block>
 </body>
 <!-- end: BODY-->

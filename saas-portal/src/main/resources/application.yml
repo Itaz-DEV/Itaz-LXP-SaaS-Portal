@@ -31,9 +31,10 @@ spring:
     activate:
       on-profile: "local" 
   datasource:
-    url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    #url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    url: jdbc:mariadb://211.236.48.234:3306/itz_lxp
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
+    username: webadm
     password: itaz9045
 
 ---
@@ -45,7 +46,7 @@ spring:
   datasource:
     url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
+    username: webadm
     password: itaz9045
 
 ---
@@ -57,7 +58,7 @@ spring:
   datasource:
     url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
+    username: webadm
     password: itaz9045
 
 ---  
@@ -66,7 +67,7 @@ spring:
     activate:
       on-profile: "common"    
   application:
-    name: user-service
+    name: defaultservice
   jpa:
     open-in-view: false #osiv 웹요청이 완료될때까지 영속성을 가짐 (성능상 안 좋음)
     generate-ddl: false #Initialize the schema on startup. 배포시에는
@@ -90,12 +91,12 @@ mybatis:
     
 logging:
   level:
-    kr.itaz.userservice: debug 
+    kr.itaz: debug 
     org.hibernate.type: trace #sql문의 bind 값을 보여준다.
 
 #사용자 메시지      
 greeting:
-  message : Welcome to the Simple User-Service
+  message : Welcome to the Portal
  
 token:
   expiration:

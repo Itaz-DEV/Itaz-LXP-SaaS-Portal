@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" 
+	 xmlns="http://www.w3.org/1999/xhtml"
+	 xmlns:th="http://www.thymeleaf.org"
+	 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	  
 <head th:fragment="commonHeader">
     <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">IT'Z LXP</title>
@@ -14,16 +15,36 @@
     <meta content="" name="author" />
 	
 	 <!-- start: CSS -->
-    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{css/common.css}" />
-    <link rel="stylesheet" th:href="@{css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/sub.css}" />
     <!-- end: CSS -->
 
     <!-- start: JS-->
-    <script th:src="@{js/jquery.min.js}"></script>
-    <script th:src="@{js/bootstrap.min.js}"></script>
-    <script th:src="@{js/common.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
     <!-- end: JS-->
+    <script type="text/javascript">
+		$(document).ready(function(){
+			$("#joinMember").click(function(){
+				window.location.href="/join/joinMember";
+			});
+			
+			$("#loginPage").click(function(){
+				window.location.href="/login";
+			});
+			
+			$("#logoutBtn").click(function(){
+				$("form[name=defaultForm]").submit();
+			});
+			
+			$("#mypageBtn").click(function(){
+				window.location.href="/mypage";
+			});
+		});
+	</script>
 </head>
 
 </html>

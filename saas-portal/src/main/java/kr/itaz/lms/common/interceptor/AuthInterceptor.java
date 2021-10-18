@@ -1,7 +1,5 @@
 package kr.itaz.lms.common.interceptor;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import kr.itaz.lms.portal.vo.PortalVO;
  
 /**
  * @packageName		: kr.itaz.lms.common.interceptor
@@ -33,12 +33,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		logger.info(":::::::::::::::::::::::::::::::::::::::::::::::::::: AuthInterceptor START ::::::::::::::::::::::::::::::::::::::::::::::::::::");
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> authMap = (Map<String, Object>) request.getSession().getAttribute("auth");
+		PortalVO loginVO = (PortalVO)request.getSession().getAttribute("loginVO");
 
-		if(authMap == null) {
+		logger.info("requestURI ::  " + request.getRequestURL());
+		
+		if(loginVO == null) {
 			logger.info(":::::::::::::::::::::::::::::::::::::::::::::::::::: 인증 정보가 존재하지 않습니다. ::::::::::::::::::::::::::::::::::::::::::::::::::::");
-			response.sendRedirect("/auth/login");
+			response.sendRedirect("/login");
 			return false;
 		}
 		 
