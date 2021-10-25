@@ -123,4 +123,103 @@
 	 	/*PortalMapper.selectUserInfo 나의 테넌트에서 신청한 서비스 목록 조회 bnso*/
 	 	select * from t_tenant_svc tts
 	 </select>
+	 
+	 <select id="selectServiceList" parameterType="String" resultType="ServiceFareVO">
+	 	/*PortalMapper.selectServiceList 메인페이지 서비스 과금 조회 gjahn*/
+	 	SELECT A.SVC_ID
+		     , A.SVC_SE_CODE 
+		     , A.SVC_ATRB_CODE 
+		     , B.FARE_SE_CODE
+		     , B.FARE_SE_CODE_NM
+		     , B.YEAR_ACCOUNT
+		     , B.MONTH_ACCOUNT
+		  FROM T_SVC_MASTER A
+		 INNER JOIN (
+		                SELECT SA.SVC_ID
+		                     , SA.FARE_SE_CODE
+		                     , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM 
+		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015002' THEN SA.FARE_ACCOUNT ELSE 0 END) AS MONTH_ACCOUNT
+		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015001' THEN SA.FARE_ACCOUNT ELSE 0 END) AS YEAR_ACCOUNT
+		                     , MAX(SB.SORT_NO) AS SORT_NO
+		                  FROM T_SVC_FARE SA
+		                 INNER JOIN T_CMMN_BASIS_CODE SB 
+		                    ON SA.FARE_SE_CODE = SB.CODE 
+		                 WHERE SVC_ID = #{svcId}
+		                 GROUP BY SVC_ID, FARE_SE_CODE
+		            ) B
+		    ON A.SVC_ID = B.SVC_ID
+		 ORDER BY B.SORT_NO
+	 </select>
+	 
+	 <select id="selectMyTenantComboList" parameterType="String" resultType="PortalVO">
+	 	/*PortalMapper.selectMyTenantComboList 서비스결제 테넌트 콤보조회 gjahn*/
+	 	SELECT A.TENANT_ID
+			 , A.TENANT_NM_KOR
+		  FROM T_TENANT A 
+		 INNER JOIN T_TENANT_USER B 
+		    ON A.TENANT_ID = B.TENANT_ID 
+		 INNER JOIN T_USER_INFORMATION C 
+		    ON B.USER_NO = C.USER_NO 
+		 WHERE C.USER_ID = #{userId}
+	 </select>
+	 
+	 <select id="selectServiceFareList" parameterType="String" resultType="TenantSvcVO">
+	 	/*PortalMapper.selectServiceList 메인페이지 서비스 과금 조회 gjahn*/
+	 	SELECT A.SVC_ID
+		     , A.SVC_SE_CODE 
+		     , A.SVC_ATRB_CODE 
+		     , B.FARE_SE_CODE AS FARE_CODE
+		     , C.CODE_NM_KOR AS FARE_CODE_NM
+		     , B.FARE_UNIT_CODE 
+		     , D.CODE_NM_KOR AS FARE_UNIT_CODE_NM
+		     , B.FARE_ACCOUNT AS FARE_AMOUNT 
+		  FROM T_SVC_MASTER A
+		 INNER JOIN T_SVC_FARE B
+		    ON A.SVC_ID = B.SVC_ID
+		 INNER JOIN T_CMMN_BASIS_CODE C 
+		    ON B.FARE_SE_CODE = C.CODE
+		 INNER JOIN T_CMMN_BASIS_CODE D
+		    ON B.FARE_UNIT_CODE = D.CODE
+		 WHERE A.SVC_ID = #{svcId}
+		 ORDER BY B.FARE_SE_CODE, B.FARE_UNIT_CODE
+	 </select>
+	 
+	 <insert id="tenantServiceInsert">
+	 	/*PortalMapper.tenantServiceIns 서비스결제 저장 gjahn*/
+	 	INSERT INTO T_TENANT_SVC 
+		(
+		      TENANT_ID
+		    , SVC_ID
+		    , SVC_SE_CODE
+		    , SVC_ATRB_CODE
+		    , FARE_CODE
+		    , FARE_UNIT_CODE
+		    , FARE_AMOUNT
+		    , USE_AT
+		    , CREAT_ID
+		    , CREAT_DT
+		    , CREAT_IP
+		    , UPDT_ID
+		    , UPDT_DT
+		    , UPDT_IP
+		)
+		VALUES
+		(
+		      #{tenantId}
+		    , #{svcId}
+		    , #{svcSeCode}
+		    , #{svcAtrbCode}
+		    , #{fareCode}
+		    , #{fareUnitCode}
+		    , #{fareAmount}
+		    , #{useAt}
+		    , #{creatId}
+		    , sysdate()
+		    , #{creatIp}
+		    , #{creatId}
+		    , sysdate()
+		    , #{creatIp}
+		) 	
+	 </insert>
+	  
 </mapper>

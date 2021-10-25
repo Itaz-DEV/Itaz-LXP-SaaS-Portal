@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.itaz.lms.portal.vo.PortalVO;
+import kr.itaz.lms.portal.vo.ServiceFareVO;
+import kr.itaz.lms.portal.vo.TenantSvcVO;
 import kr.itaz.lms.sample.vo.SampleVO;
 
 @Mapper
@@ -17,4 +19,10 @@ public interface PortalMapper {
 
 	public List<PortalVO> selectMyTenantList(PortalVO portalVO);
 	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO);
+	
+	public List<ServiceFareVO> selectServiceList(String svcId);
+	public List<PortalVO> selectMyTenantComboList(String userId);
+	public List<TenantSvcVO> selectServiceFareList(String svcId);
+	public void tenantServiceInsert(TenantSvcVO tenantSvcVO);
+	
 }

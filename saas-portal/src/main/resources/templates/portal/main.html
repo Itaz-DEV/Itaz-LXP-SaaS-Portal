@@ -6,7 +6,20 @@
  	layout:decorator="layout/defaultLayout">
 <!-- start: HEAD -->
 <head>
-    
+    <script th:inline="javascript">
+    	$(document).ready(function(){
+    		$(".subscribe_btn").click(function () {
+    			let svcId = $(this).attr("data-svcid");
+    			let fareSeCode = $(this).attr("data-faresecode");
+    			
+    			/*<![CDATA[*/
+    			var session = /*[[${session}]]*/ 'default';
+    			/*]]*/
+    			if ($.isEmptyObject(session)) $(".joinPop").modal("show");
+    			else window.location.href = "/service/payment?svcId=" + svcId + "&fareSeCode=" + fareSeCode; 
+    	    });
+    	});
+    </script>
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY-->
@@ -53,6 +66,32 @@
                 <div class="container">
                     <h1 class="bottomTitle">도입 비용 안내</h1>
                     <ul class="bottomBox clearfix">
+                    	<li th:each="serviceFare : ${serviceFareList}" th:class="${serviceFare.fareSeCode=='C014005'?'on':''}">
+                    		<div class="priceRibbon" th:if="${serviceFare.fareSeCode=='C014005'}">
+                                <div class="ribbonText">추천</div>
+                            </div>
+                            <div class="priceTitle">
+                                <h2 th:text="${serviceFare.fareSeCodeNm}"></h2>
+                                <!-- 표시할수있는 데이터가 없어서 시안 보고 하드코딩 -->
+                                <p th:if="${serviceFare.fareSeCode=='C014004'}">비대면 학습 진행을 위한 LMS<br>&nbsp;</p>
+                                <p th:if="${serviceFare.fareSeCode=='C014005'}">대면/비대면 학습 통합관리<br>&nbsp;</p>
+                                <p th:if="${serviceFare.fareSeCode=='C014006'}">대면/비대면 학습 통합관리<br>(+지능형 중도 탈락 위험 감지)</p>
+                            </div>
+                            <div class="price" th:if="${serviceFare.monthAccount} and ${serviceFare.monthAccount != 0}">
+                                <p><b th:text="${#numbers.formatInteger(serviceFare.monthAccount, 3, 'COMMA') + '원'}"></b> <span>/ 월</span></p>
+                            </div>
+                            <div class="discount">
+                            	<!-- 표시할수있는 데이터가 없어서 시안 금액 보고 연간 비용에 20퍼 곱해 만들어 표시 -->
+                                <span class="beforePrice" th:text="${#numbers.formatInteger((serviceFare.yearAccount*1.2), 3, 'COMMA') + '원'}"></span>
+                                <p><b th:text="${#numbers.formatInteger(serviceFare.yearAccount, 3, 'COMMA') + '원'}"></b> / 년</p>
+                                <span class="optionText">(연간 결제시 할인 적용)</span>
+                            </div>
+                            <div class="priceBtn" style="z-index:1;position:relative">
+                                <button th:class="${'btn subscribe_btn ' + (serviceFare.fareSeCode=='C014005' ? 'purpleBtn' : 'whiteBtn')}" 
+                                	th:data-svcid="${serviceFare.svcId}" th:data-faresecode="${serviceFare.fareSeCode}">서비스 신청</button>
+                            </div>
+                        </li>
+                    	<!-- 
                         <li>
                             <div class="priceTitle">
                                 <h2>베이직</h2>
@@ -107,6 +146,7 @@
                                 <button class="btn whiteBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
                             </div>
                         </li>
+                        -->
                     </ul>
                 </div>
             </div>
@@ -124,11 +164,11 @@
                         <h4 class="modal-title" id="joinPopTitle">알림</h4>
                     </div>
                     <div class="modal-body">
-                        <p>서비스를 이용하시려면 회원가입이 필요합니다.<br>회원가입을 진행하시겠습니까?</p>
+                        <p>서비스를 이용하시려면 로그인이 필요합니다.<br>로그인 페이지로 이동하시겠습니까?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn whiteBtn" data-dismiss="modal">취소</button>
-                        <button type="button" class="btn purpleBtn">확인</button>
+                        <button type="button" class="btn purpleBtn" onclick="window.location.href='/login'">확인</button>
                     </div>
                 </div>
             </div>

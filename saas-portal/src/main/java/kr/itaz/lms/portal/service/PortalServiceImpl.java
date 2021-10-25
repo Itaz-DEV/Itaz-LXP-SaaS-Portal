@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import kr.itaz.lms.portal.mapper.PortalMapper;
 import kr.itaz.lms.portal.vo.PortalVO;
+import kr.itaz.lms.portal.vo.ServiceFareVO;
+import kr.itaz.lms.portal.vo.TenantSvcVO;
 
 @Service
 public class PortalServiceImpl implements PortalService{
@@ -68,4 +70,21 @@ public class PortalServiceImpl implements PortalService{
 	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO){
 		return portalMapper.selectMyTenantServiceList(portalVO);
 	}
+
+	public List<ServiceFareVO> selectServiceList(String svcId) {
+		return portalMapper.selectServiceList(svcId);
+	}
+
+	public List<PortalVO> selectMyTenantList(String userId) {
+		return portalMapper.selectMyTenantComboList(userId);
+	}
+
+	public List<TenantSvcVO> selectServiceFareList(String svcId) {
+		return portalMapper.selectServiceFareList(svcId);
+	}
+
+	public void tenantServiceInsert(TenantSvcVO tenantSvcVO) {
+		portalMapper.tenantServiceInsert(tenantSvcVO);
+	}
+	
 }

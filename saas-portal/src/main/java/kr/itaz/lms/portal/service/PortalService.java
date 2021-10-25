@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import kr.itaz.lms.portal.vo.PortalVO;
+import kr.itaz.lms.portal.vo.ServiceFareVO;
+import kr.itaz.lms.portal.vo.TenantSvcVO;
 
 public interface PortalService {
 
@@ -78,4 +80,53 @@ public interface PortalService {
 	 * @return
 	 */
 	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO);
+	
+	/**
+	 * 서비스 과금 목록
+	 * @Method Name : selectMyTenantServiceList
+	 * @작성일 : 2021. 10. 20.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 20.
+	 * @Method 설명 : 
+	 * @param svcId
+	 * @return
+	 */
+	public List<ServiceFareVO> selectServiceList(String svcId);
+	
+	/**
+	 * 테넌트 정보
+	 * @Method Name : selectMyTenantList
+	 * @작성일 : 2021. 10. 21.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 21.
+	 * @Method 설명 : 
+	 * @param userId
+	 * @return
+	 */
+	public List<PortalVO> selectMyTenantList(String userId);
+	
+	/**
+	 * 서비스 과금 단위 정보
+	 * @Method Name : selectServiceFareList
+	 * @작성일 : 2021. 10. 21.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 21.
+	 * @Method 설명 : 
+	 * @param userId
+	 * @return
+	 */
+	public List<TenantSvcVO> selectServiceFareList(String svcId);
+	
+	/**
+	 * 테넌트 서비스 등록
+	 * @Method Name : tenantServiceInsert
+	 * @작성일 : 2021. 10. 21.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 21.
+	 * @Method 설명 : 
+	 * @param userId
+	 * @return
+	 */
+	public void tenantServiceInsert(TenantSvcVO tenantSvcVO);	
+	
 }
