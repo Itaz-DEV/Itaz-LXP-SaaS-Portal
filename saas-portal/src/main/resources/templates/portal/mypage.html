@@ -9,6 +9,10 @@
 <head>
 <script type="text/javascript">
 	$(document).ready(function(){
+		/*<![CDATA[*/
+		var tenantList = /*[[${tenantList}]]*/ 'default';
+		/*]]*/
+		console.log(tenantList);
 		$("#createTenant").click(function(){
 			window.location.href="/tenant";
 		});

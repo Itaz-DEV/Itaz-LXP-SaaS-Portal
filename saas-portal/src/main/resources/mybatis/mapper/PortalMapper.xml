@@ -116,7 +116,8 @@
 			,t_user_information tui
 		where TT.TENANT_ID = TTU.TENANT_ID
 		and ttu.USER_NO  = tui.user_no
-		and TUI.USER_NO = #{userId}
+		and TUI.USER_ID = #{userId}
+<!-- userId userNo 비교해서 아무것도 안나옴		and TUI.USER_NO = #{userId} -->
 	 </select>
 
 	 <select id="selectMyTenantServiceList" parameterType="String" resultType="PortalVO">
@@ -168,8 +169,9 @@
 	 	SELECT A.SVC_ID
 		     , A.SVC_SE_CODE 
 		     , A.SVC_ATRB_CODE 
-		     , B.FARE_SE_CODE AS FARE_CODE
-		     , C.CODE_NM_KOR AS FARE_CODE_NM
+		     , B.FARE_SE_CODE 
+		     , B.FARE_CODE
+		     , C.CODE_NM_KOR AS FARE_SE_CODE_NM
 		     , B.FARE_UNIT_CODE 
 		     , D.CODE_NM_KOR AS FARE_UNIT_CODE_NM
 		     , B.FARE_ACCOUNT AS FARE_AMOUNT 

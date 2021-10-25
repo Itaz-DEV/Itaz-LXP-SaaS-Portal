@@ -145,7 +145,7 @@
 	                    	<li class="radio" th:each="fareCode, index : ${serviceFareList}">
 	                            <label>
 	                                <input type="radio" name="options" id="optionsRadios" th:value="${fareCode.fareCode}" 
-	                                	th:text="${fareCode.fareCodeNm}" th:checked="${fareCode.fareCode == selFareSeCode}" th:data-idx="${index.index}">  
+	                                	th:text="${fareCode.fareSeCodeNm}" th:checked="${fareCode.fareSeCode == selFareSeCode}" th:data-idx="${index.index}">  
 	                                <p th:text="${#numbers.formatInteger(fareCode.fareAmount, 3, 'COMMA') + '원 / ' + fareCode.fareUnitCodeNm}"/>
 	                            </label>
 	                        </li>

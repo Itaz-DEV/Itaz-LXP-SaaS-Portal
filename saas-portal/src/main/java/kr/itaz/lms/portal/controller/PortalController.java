@@ -202,8 +202,8 @@ public class PortalController {
 	 * @return
 	 */
 	@GetMapping("/mypage")
-    public String mypage(Model model, PortalVO portalVO) {
-		
+    public String mypage(HttpServletRequest request, Model model) {
+		PortalVO portalVO = (PortalVO) request.getSession().getAttribute("loginVO");
 		List<PortalVO> tenantList = portalService.selectMyTenantList(portalVO);
 		model.addAttribute("tenantList", tenantList);
 		

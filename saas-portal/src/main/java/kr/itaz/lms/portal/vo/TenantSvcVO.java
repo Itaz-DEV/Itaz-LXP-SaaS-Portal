@@ -23,9 +23,11 @@ public class TenantSvcVO {
 	@NotBlank(groups = {ValidationGroups.insert.class}) 
 	private String svcAtrbCode; //시비스속성
 	
-	private String fareCode;//과금제 코드
+	private String fareCode;//서비스 과금제 코드
 	
-	private String fareCodeNm;//과금제 코드명
+	private String fareSeCode; //과금제 코드
+	
+	private String fareSeCodeNm; //과금제 코드명
 	
 	private String fareUnitCode; //과금단위 코드
 	
