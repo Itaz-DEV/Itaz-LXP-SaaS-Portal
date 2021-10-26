@@ -3,14 +3,12 @@
 header {border-bottom: 1px solid #ddd;}
 
 /*subVisual*/
-.subVisual {text-align: center; border-bottom: 1px solid #ddd; padding: 120px 0 35px;}
+.subVisual {text-align: center; border-bottom: 1px solid #ddd; padding: 160px 0 100px;}
 .subVisual h1 {font-size: 45px; font-weight: 700;}
 
 /*subWrap*/
 .subWrap {padding: 50px 0;}
 .subWrap .btnWrap button {width: 100%; border-radius: 0; margin: 8px 0; font-size: 16px; padding: 15px 0;}
-
-.subWrap .title {text-align: center; border-bottom: 1px solid #ddd; padding: 0px 0 50px;}
 
 .subWrap .selectList ul {border: 1px solid #ddd; padding: 0;}
 .subWrap .selectList ul li {border-bottom: 1px solid #ddd; padding: 25px 20px; margin: 0;}
@@ -26,6 +24,14 @@ header {border-bottom: 1px solid #ddd;}
 .subWrap .charge ul li.realPrice {font-size: 18px; border-top: 1px solid #ddd; padding-top: 20px; font-weight: 500;}
 .subWrap .charge .btn-group {width: 100%; margin: 25px 0 10px;}
 .subWrap .charge .btn-group .btn {width: 50%; border-radius: 0; background: #fff; border: 1px solid #ddd; font-size: 16px; color: #616161; padding: 16px 0 13px 0;}
+
+.subWrap .tab-content .tab-pane {padding: 20px 0;}
+.subWrap .nav-pills li+li {margin-left: 10px;}
+.subWrap .nav-pills li.active a,
+.subWrap .nav-pills li.active a:hover,
+.subWrap .nav-pills li.active a:focus {background: #452aff;}
+/*.subWrap .nav li a:focus, 포커스됐을때 글자색이 배경색과 같이 바뀌어서 글자가 안보임 주석*/
+.subWrap .nav li a:hover {color: #452aff;}
 
 /*responsive*/
 @media all and (max-width: 600px) {

@@ -3,6 +3,7 @@ package kr.itaz.lms.portal.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -140,7 +141,32 @@ public class PortalController {
 		portalService.insertUserInformation(protalVO);
         return "redirect:/login";
     }
+	
+	/**
+	 * 회원정보수정
+	 * @Method Name : updateUserInformation
+	 * @작성일 : 2021. 10.26.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 
+	 * @Method 설명 :
+	 * @param protalVO
+	 * @return
+	*/
+	@PostMapping("/userinfo/update")
+    public ResponseEntity<?> updateUserInformation(HttpServletRequest request, Model model, @RequestBody PortalVO protalVO) {
+		PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
+		Map<String, String> messageMap = new HashMap<String, String>();
+		
+		protalVO.setUserNo(loginVO.getUserNo());
+		protalVO.setUserId(loginVO.getUserId());
+		protalVO.setCreatIp(this.getIp(request));
+		portalService.updateUserInformation(request, protalVO);
 
+		messageMap.put("message", "수정이 완료되었습니다.");
+        return ResponseEntity.ok().body(messageMap);
+    }
+	
+	
 	/**
 	 * 로그인 화면 이동
 	 * @Method Name : login
@@ -205,14 +231,39 @@ public class PortalController {
     public String mypage(HttpServletRequest request, Model model) {
 		PortalVO portalVO = (PortalVO) request.getSession().getAttribute("loginVO");
 		List<PortalVO> tenantList = portalService.selectMyTenantList(portalVO);
+		
 		model.addAttribute("tenantList", tenantList);
+		model.addAttribute("userInfo", portalVO);
 		
 		if(tenantList != null) {
-			List<PortalVO> tenantServiceList = portalService.selectMyTenantServiceList(portalVO);
+			List<TenantSvcVO> tenantServiceList = portalService.selectMyTenantServiceList(portalVO);
 			model.addAttribute("tenantServiceList", tenantServiceList);
 		}
-		
 		return "portal/mypage";
+    }
+	
+	/**
+	 * 마이페이지 로드 전 비밀번호 체크
+	 * @Method Name : logout
+	 * @작성일 : 2021. 10. 17.
+	 * @작성자 : itaz-bnso
+	 * @변경이력 : 2021. 10. 17.
+	 * @Method 설명 : 
+	 * @param request
+	 * @param model
+	 * @param portalVO
+	 * @return
+	 */
+	@GetMapping("/mypage/passwordChk")
+    public ResponseEntity<Integer> mypagePasswordChk(HttpServletRequest request, Model model, String password) {
+		PortalVO portalVO = (PortalVO) request.getSession().getAttribute("loginVO");
+		
+		portalVO.setPassword(password);
+		int passwordChk = portalService.passwordCheck(portalVO);
+
+		model.addAttribute("passwordChk", passwordChk);		
+		
+		return ResponseEntity.ok().body(passwordChk);
     }
 	
 	/**
@@ -228,12 +279,45 @@ public class PortalController {
 	 * @return
 	 */
 	@GetMapping("/tenant")
-    public String tenant(HttpServletRequest request, Model model, PortalVO portalVO) {
+    public String tenant(HttpServletRequest request, Model model, Optional<String> tenantId) {
 		//테넌트 분류 조회
 		List<PortalVO> tenantClList = portalService.selectCommCodeList("C002");		//테넌트 분류 리스트
 		model.addAttribute("tenantClList", tenantClList);
+		
+		if (!tenantId.isEmpty()) {
+			PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
+			loginVO.setTenantId(tenantId.get());
+			List<PortalVO> tenantList = portalService.selectMyTenantList(loginVO);
+			model.addAttribute("tenant", tenantList.get(0));
+		}
 				
 		return "portal/tenant";
+    }
+	
+	/**
+	 * 테넌트 수정
+	 * @Method Name : tenantUpdate
+	 * @작성일 : 2021. 10. 17.
+	 * @작성자 : itaz-bnso
+	 * @변경이력 : 2021. 10. 17.
+	 * @Method 설명 : 
+	 * @param request
+	 * @param model
+	 * @param portalVO
+	 * @return
+	 */
+	@PostMapping("/tenant/update")
+    public ResponseEntity<?> tenantUpdate(HttpServletRequest request, Model model, @RequestBody PortalVO potalVO) {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
+		potalVO.setUserId(loginVO.getUserId());
+		potalVO.setCreatIp(this.getIp(request));
+		
+		portalService.updateTenantInfo(potalVO);
+		
+		messageMap.put("message", "수정이 완료되었습니다.");
+			
+		return ResponseEntity.ok().body(messageMap);
     }
 	
 	/**
@@ -253,8 +337,29 @@ public class PortalController {
     }
 	
 	/**
+	 * 테넌트 등록
+	 * @Method Name : tenantInsert
+	 * @작성일 : 2021. 10. 25.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 25.
+	 * @Method 설명 : 
+	 * @param portalVO
+	 * @return
+	 */
+	@PostMapping("/tenant/insert")
+    public String tenantInsert(HttpServletRequest request, Model model, PortalVO portalVO){
+		PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
+		portalVO.setUserNo(loginVO.getUserNo());
+		portalVO.setUserId(loginVO.getUserId());
+		portalVO.setCreatIp(this.getIp(request));
+		
+		portalService.insertTenantInfo(portalVO);
+        return "redirect:/mypage";
+    }
+	
+	/**
 	 * 서비스 결제 등록
-	 * @Method Name : tenantDetailClList
+	 * @Method Name : tenantServiceInsert
 	 * @작성일 : 2021. 10. 25.
 	 * @작성자 : itaz-bnso
 	 * @변경이력 : 2021. 10. 25.

@@ -34,6 +34,18 @@ public interface PortalService {
 	public void insertUserInformation(PortalVO portalVO);
 	
 	/**
+	 * 회원정보 수정
+	 * @Method Name : updateUserInformation
+	 * @작성일 : 2021. 10. 21.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 21.
+	 * @Method 설명 : 
+	 * @param portalVO
+	 * @return
+	 */
+	public void updateUserInformation(HttpServletRequest request, PortalVO portalVO);
+	
+	/**
 	 * 이메일 중복체크 여부
 	 * @Method Name : selectCheckUuplicateEmail
 	 * @작성일 : 2021. 10. 16.
@@ -58,6 +70,30 @@ public interface PortalService {
 	public int login(HttpServletRequest request, PortalVO portalVO);
 	
 	/**
+	 * 테넌트 등록
+	 * @Method Name : insertTenantInfo
+	 * @작성일 : 2021. 10. 25.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 25.
+	 * @Method 설명 : 
+	 * @param portalVO
+	 * @return
+	 */
+	public void insertTenantInfo(PortalVO portalVO);
+	
+	/**
+	 * 테넌트 수정
+	 * @Method Name : updateTenantInfo
+	 * @작성일 : 2021. 10. 25.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 25.
+	 * @Method 설명 : 
+	 * @param portalVO
+	 * @return
+	 */
+	public void updateTenantInfo(PortalVO portalVO);
+	
+	/**
 	 * 나의 테넌트 정보
 	 * @Method Name : selectMyTenantInfo
 	 * @작성일 : 2021. 10. 17.
@@ -79,7 +115,7 @@ public interface PortalService {
 	 * @param portalVO
 	 * @return
 	 */
-	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO);
+	public List<TenantSvcVO> selectMyTenantServiceList(PortalVO portalVO);
 	
 	/**
 	 * 서비스 과금 목록
@@ -112,7 +148,7 @@ public interface PortalService {
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
 	 * @Method 설명 : 
-	 * @param userId
+	 * @param svcId
 	 * @return
 	 */
 	public List<TenantSvcVO> selectServiceFareList(String svcId);
@@ -124,9 +160,21 @@ public interface PortalService {
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
 	 * @Method 설명 : 
+	 * @param tenantSvcVO
+	 * @return
+	 */
+	public void tenantServiceInsert(TenantSvcVO tenantSvcVO);
+	
+	/**
+	 * 비밀번호 확인
+	 * @Method Name : passwordCheck
+	 * @작성일 : 2021. 10. 21.
+	 * @작성자 : gjahn56
+	 * @변경이력 : 2021. 10. 21.
+	 * @Method 설명 : 
 	 * @param userId
 	 * @return
 	 */
-	public void tenantServiceInsert(TenantSvcVO tenantSvcVO);	
+	public int passwordCheck(PortalVO portalVO);
 	
 }

@@ -16,9 +16,13 @@ public interface PortalMapper {
 	public void insertUserInformation(PortalVO portalVO);
 	public int selectUserCheck(String userId);
 	public PortalVO selectUserInfo(PortalVO portalVO);
+	public void updateUserInfo(PortalVO portalVO);
 
+	public void insertTenantInfo(PortalVO portalVO);
+	public void updateTenantInfo(PortalVO portalVO);
+	public void insertTenantUser(PortalVO portalVO);
 	public List<PortalVO> selectMyTenantList(PortalVO portalVO);
-	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO);
+	public List<TenantSvcVO> selectMyTenantServiceList(PortalVO portalVO);
 	
 	public List<ServiceFareVO> selectServiceList(String svcId);
 	public List<PortalVO> selectMyTenantComboList(String userId);

@@ -22,11 +22,14 @@ public class PortalVO {
 	@NotBlank(groups = {ValidationGroups.insert.class}) 
 	private String userName;
 	private String creatIp;
+	private String userNo;
 	
 	
 	private String tenantId; 			//테넌트 아이디
 	private String tenantCl;			//테넌트 분류
+	private String tenantClNm;			//테넌트 분류명
 	private String tenantDtlCl;			//테넌트 상세 분류
+	private String tenantDtlClNm;		//테넌트 상세 분류 명
 	private String tenantNmKor;			//테넌트 국문명
 	private String tenantNmEng;			//테넌트 영문명
 	private String tenantReprsntId;		//테넌트 대표 아이디(서비스 도메인 사용)

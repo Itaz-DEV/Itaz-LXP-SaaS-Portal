@@ -7,18 +7,103 @@
 <!-- start: HEAD -->
 
 <head>
-<script type="text/javascript">
-	$(document).ready(function(){
-		/*<![CDATA[*/
-		var tenantList = /*[[${tenantList}]]*/ 'default';
-		/*]]*/
-		console.log(tenantList);
-		$("#createTenant").click(function(){
-			window.location.href="/tenant";
+	<script th:inline="javascript">
+		$(document).ready(function(){
+			var passwordChk = 0;
+			$("#createTenant").click(function(){
+				window.location.href="/tenant";
+			});
+			
+			//패스워드 확인
+			$("#currPasswordChk").click(function() { 
+				if (!$("input[name=currPassword]").val()) {
+					alert("현재 패스워드를 입력해주세요");
+					return false;
+				}
+				
+				$.ajax({
+					url: "/mypage/passwordChk",
+					data: {password: $("input[name=currPassword]").val()},
+					type: "GET"
+				}).done(function (res) {
+					if (res === 1) {
+						passwordChk = res;
+						$("#currPassword").val("");
+	    				$("#currPassword").prop("disabled", true);
+	    				$("#currPasswordChk").prop("disabled", true);
+	    				$("#currPassword").prop("placeholder", "패스워드 확인 완료");
+	    				
+	    				$("#password").prop("disabled", false);
+	    				$("#passwordConfirm").prop("disabled", false);
+	    				$("#userName").prop("disabled", false);
+	    				$("#telNo").prop("disabled", false);
+	    				
+					} else {
+						alert("비밀번호가 맞지 않습니다.");
+					}
+					
+				}).fail(function(res, status, error) {
+					console.log(res);
+				});
+			});
+			
+			//내 정보 수정
+			$("#updateUserInfo").click(function() {
+				var data = {
+					password: $("#password").val(),
+					userName: $("#userName").val(),
+					telNo: $("#telNo").val()		
+				};
+				
+				if (passwordChk !== 1) {
+					alert("현재 비밀번호 확인 후 수정 가능합니다.");
+					return false;
+				}
+				if(!$.trim(data.password) && $.trim($("#passwordConfirm").val())){
+					alert("변경패스워드를 입력해주세요.");
+					return false;
+				}	
+				if($.trim(data.password) && !$.trim($("#passwordConfirm").val())){
+					alert("변경패스워드 확인을 입력해주세요.");
+					return false;
+				}				
+				if(data.password != $("#passwordConfirm").val()){
+					alert("패스워드가 맞지 않습니다. \n확인 후 다시 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim(userName)){
+					alert("이름을 입력해주세요.");
+					return false;
+				}
+				
+				$.ajax({
+					url: "/userinfo/update",
+					data: JSON.stringify(data),
+					type: "POST",
+					dataType: "json",
+    				contentType: 'application/json'
+				}).done(function (res) {
+					alert("수정이 완료되었습니다.");
+					
+				}).fail(function(res, status, error) {
+					console.log(res);
+					alert("수정에 문제가 발생했습니다.");
+				});
+			});
 		});
-	});
-</script>
-   
+		
+		function tenantDetail(tenantId) {
+			window.location.href = '/tenant?tenantId=' + tenantId;
+		}
+		
+		
+	</script>
+    <style>
+    	.tableRowHeight {
+    		height: 50px !important;
+    	}
+    </style>
 </head>
 <!-- end: HEAD -->
 
@@ -30,41 +115,127 @@
         <!--s: section-->
         <section>
             <div class="subVisual">
-                <h1>내 테넌트</h1>
+                <h1>My Page</h1>
             </div>
             <div class="subWrap">
-                <div class="container">
+                <div class="container" id="container">
                     <div class="table100">
+                    	<!-- 등록된 테넌트 정보가 없을때 -->
 						<th:block th:if="${#lists.isEmpty(tenantList)}">
 							<div class="title">
 								<button class="btn purpleBtn" id="createTenant">테넌트 생성</button>
 				            </div>
 						</th:block>
 						<th:block th:unless="${#lists.isEmpty(tenantList)}">
-	                        <table>
-	                            <thead>
-	                                <tr class="table100-head">
-	                                    <th class="column1">기관명</th>
-	                                    <th class="column2">구독프로그램</th>
-	                                    <th class="column3">실시간 사용요금 (이용기간)</th>
-	                                    <th class="column4">해지예상금액</th>
-	                                    <th class="column5">상태</th>
-	                                    <th class="column6">관리</th>
-	                                    <th class="column7">관리</th>
-	                                </tr>
-	                            </thead>
-	                            <tbody>
-	                                <tr>
-	                                    <td class="column1">주식회사 이타즈</td>
-	                                    <td class="column2">베이직 ver.</td>
-	                                    <td class="column3"><p class="blackText">110,000,000</p>(2021.11.10~2022.10.09)</td>
-	                                    <td class="column4"><p class="blackText">800,000</p></td>
-	                                    <td class="column5"><p class="redText">만료</p><button class="btn redBtn">연장 / 업그레이드</button></td>
-	                                    <td class="column6"><button class="btn whiteBtn">테넌트 바로가기</button></td>
-	                                    <th class="column7">관리</th>
-	                                </tr>
-	                            </tbody>
-	                        </table>
+	                        <div class="subWrap">
+				                <div class="container">
+				                    <div role="tabpanel">
+				
+				                        <!-- Nav tabs -->
+				                        <ul class="nav nav-pills" role="tablist">
+				                            <li role="presentation" class="active"><a href="#tab01" aria-controls="tab01" role="tab" data-toggle="tab">내 정보</a></li>
+				                            <li role="presentation"><a href="#tab02" aria-controls="tab02" role="tab" data-toggle="tab">테넌트 정보</a></li>
+				                            <li role="presentation"><a href="#tab03" aria-controls="tab03" role="tab" data-toggle="tab">서비스 신청내역</a></li>
+				                        </ul>
+				
+				                        <!-- Tab panes -->
+				                        <div class="tab-content">
+				                            <div role="tabpanel" class="tab-pane active" id="tab01">
+				                                <div class="subWrap">
+									                <div class="subContainer" id="joinContainer">
+									                    <form name="joinForm" method="POST">
+									                    	<input type="hidden" name="duplicateYn" id="duplicateYn" value="N"/>
+									                         <div class="form-group">
+									                            <label for="userId">아이디(이메일)</label>
+									                            <input type="text" class="form-control" id="userId" name="userId" disabled th:value="${session.loginVO.userId}">
+									                        </div>
+									                        <div class="form-group check-form">
+									                            <label for="password">현재 패스워드</label>
+									                            <input type="password" class="form-control" id="currPassword" name="currPassword" placeholder="현재 패스워드를 입력하세요.">
+									                            <button type="button" class="btn purpleBtn" id="currPasswordChk">확인</button>
+									                        </div>
+									                        <div class="form-group">
+									                            <label for="password">변경 패스워드</label>
+									                            <input type="password" class="form-control" id="password" name="password" placeholder="변경 패스워드를 입력하세요." disabled>
+									                        </div>
+									                        <div class="form-group">
+									                            <label for="passwordConfirm">변경 패스워드 확인</label> 
+									                            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="변경 패스워드를 입력하세요." disabled>
+									                        </div>
+								                           <div class="form-group">
+									                            <label for="userId">이름</label>
+									                            <input type="text" class="form-control" id="userName" name="userName" th:value="${session.loginVO.userName}" disabled>
+									                        </div>
+									                        <div class="form-group">
+									                            <label for="telNo">휴대폰번호</label>
+									                            <input type="text" class="form-control" id="telNo" name="telNo" th:value="${session.loginVO.telNo}" disabled>
+									                        </div>
+									                        <div class="btnWrap">
+									                            <button type="button" class="btn purpleBtn" id="updateUserInfo">회원 정보 수정</button>
+									                        </div>
+									                    </form>
+									                </div>
+									            </div>
+				                            </div>
+				                            <div role="tabpanel" class="tab-pane" id="tab02">
+				                            	<div class="table100">
+				                                    <table>
+				                                        <thead>
+				                                            <tr class="table100-head">
+				                                                <th class="column1">테넌트 분류</th>
+				                                                <th class="column2">테넌트 명</th>
+				                                                <th class="column3">테넌트 대표 아이디</th>
+				                                                <th class="column4">테넌트 담당자 명</th>
+				                                                <th class="column5"></th>
+				                                            </tr>
+				                                        </thead>
+				                                        <tbody>
+				                                            <tr th:each="tenant:${tenantList}" class="tableRowHeight">
+				                                                <td class="column1" th:text="${tenant.tenantClNm + '(' + tenant.tenantDtlClNm + ')'}"></td>
+				                                                <td class="column2" th:text="${tenant.tenantNmKor}"></td>
+				                                                <td class="column3" th:text="${tenant.tenantReprsntId}"></td>
+				                                                <td class="column4" th:text="${tenant.chargerNm}"></td>
+				                                                <td class="column5"><button class="btn whiteBtn" th:onclick="tenantDetail([[${tenant.tenantId}]])">테넌트 바로가기</button></td>
+				                                            </tr>
+				                                        </tbody>
+				                                    </table>
+				                                </div>
+				                            </div>
+				                            <div role="tabpanel" class="tab-pane" id="tab03">
+				                            	<div class="table100">
+				                                    <table>
+				                                        <thead>
+				                                            <tr class="table100-head">
+				                                            	<th class="column1">서비스 명</th>
+				                                                <th class="column2">구독프로그램</th>
+				                                                <th class="column3">금액 (이용기간)</th>
+<!-- 				                                                <th class="column4">해지예상금액</th> -->
+				                                                <th class="column4">상태</th>
+<!-- 				                                                <th class="column5">매뉴얼</th> -->
+				                                            </tr>
+				                                        </thead>
+				                                        <tbody>
+				                                            <tr th:each="tenantService:${tenantServiceList}">
+				                                            	<td class="column1" th:text="${tenantService.svcNmKor}"></td>
+				                                                <td class="column2" th:text="${tenantService.fareSeCodeNm}"></td>
+				                                                <td class="column3">
+				                                                    <p class="blackText" th:text="${#numbers.formatInteger(tenantService.fareAmount, 3, 'COMMA')}"></p>
+				                                                    <th:block th:text="${tenantService.startDt != ''?('(' + tenantService.startDt + ' ~ ' + tenantService.endDt + ')'):''}"></th:block>
+				                                                </td>
+<!-- 				                                                <td class="column4"><p class="blackText">800,000</p></td> -->
+				                                                <td class="column4">
+				                                                    <p class="redText">만료</p><button class="btn redBtn">연장/업그레이드</button>
+				                                                </td>
+<!-- 				                                                <td class="column5"><button class="btn lineBtn">매뉴얼 다운로드</button></td> -->
+				                                            </tr>
+				                                        </tbody>
+				                                    </table>
+				                                </div>
+											</div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
                         </th:block>
                     </div>
                 </div>

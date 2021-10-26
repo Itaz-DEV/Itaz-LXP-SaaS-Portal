@@ -17,6 +17,8 @@ public class TenantSvcVO {
 	@NotBlank(groups = {ValidationGroups.insert.class}) 
 	private String svcId; //서비스 id
 	
+	private String svcNmKor; //서비스 명
+	
 	@NotBlank(groups = {ValidationGroups.insert.class}) 
 	private String svcSeCode; //서비스 구분
 	
@@ -36,6 +38,9 @@ public class TenantSvcVO {
 	private Integer fareAmount;//과금 금액
 	
 	private Integer useAt; //사용여부
+	
+	private String startDt; //사용시작기간
+	private String endDt; //사용종료기간
 	
 	private String creatId;
 	private String creatIp;

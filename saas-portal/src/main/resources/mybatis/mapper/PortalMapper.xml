@@ -61,12 +61,17 @@
 	 </select>
 
 	 <insert id="insertTenantInfo" parameterType="PortalVO">
+	 
+		<selectKey keyProperty="tenantId" resultType="string" order="BEFORE">
+	        SELECT uuid() as tenantId
+	    </selectKey>
+	    
 		INSERT INTO T_TENANT
 		(
-	 		 TENANT_NM_KOR
+			 TENANT_ID
+	 		 ,TENANT_NM_KOR
 			 ,TENANT_CL
 			 ,TENANT_DTL_CL
-			 ,TENANT_NM_KOR
 			 ,TENANT_NM_ENG
 			 ,TENANT_REPRSNT_ID
 			 ,REPRSNT_EMAIL
@@ -79,10 +84,10 @@
 		)
 		VALUES
 		(
-			#{tenantNmKor}
+			#{tenantId}
+			,#{tenantNmKor}
 			,#{tenantCl}
 			,#{tenantDtlCl}
-			,#{tenantNmKor}
 			,#{tenantNmEng}
 			,#{tenantReprsntId}
 			,#{reprsntEmail}
@@ -93,14 +98,50 @@
 			,#{chargerId}
 			,#{chargerNm}
 		)
+	</insert>
+	
+	<insert id="insertTenantUser">
+		INSERT INTO T_TENANT_USER 
+		(
+		      USER_NO
+			, TENANT_ID
+			, ASSIGN_DATETIME
+			, TENANT_ADMINISTRATOR_YN
+			, REGISTRATION_TENANT_YN
+			, TENANT_ESNTL_ID
+			, CREAT_ID
+			, CREAT_DT
+			, CREAT_IP
+			, UPDT_ID
+			, UPDT_DT
+			, UPDT_IP
+		)
+		VALUES
+		(
+		      #{userNo}
+		    , #{tenantId}
+		    , NULL
+		    , 1
+		    , 0
+		    , NULL
+		    , #{userId}
+		    , SYSDATE()
+		    , #{creatIp}
+		    , #{userId}
+		    , SYSDATE()
+		    , #{creatIp}
+		)
 	 </insert>
+	 
 	 <select id="selectMyTenantList" parameterType="String" resultType="PortalVO">
 	 	/*PortalMapper.selectMyTenantList 나의 테넌트 목록 조회 bnso*/
 		select
 			tt.TENANT_ID
 			,tt.TENANT_NM_KOR
 			,tt.TENANT_CL
+			,(SELECT CODE_NM_KOR FROM t_cmmn_basis_code WHERE CODE = TT.TENANT_CL) AS TENANT_CL_NM
 			,tt.TENANT_DTL_CL
+			,(SELECT CODE_NM_KOR FROM t_cmmn_basis_code WHERE CODE = TT.TENANT_DTL_CL) AS TENANT_DTL_CL_NM
 			,tt.TENANT_NM_KOR
 			,tt.TENANT_NM_ENG
 			,tt.TENANT_REPRSNT_ID
@@ -117,12 +158,36 @@
 		where TT.TENANT_ID = TTU.TENANT_ID
 		and ttu.USER_NO  = tui.user_no
 		and TUI.USER_ID = #{userId}
+		<if test="tenantId != '' and tenantId != null">and tt.TENANT_ID = #{tenantId}</if>
 <!-- userId userNo 비교해서 아무것도 안나옴		and TUI.USER_NO = #{userId} -->
 	 </select>
 
-	 <select id="selectMyTenantServiceList" parameterType="String" resultType="PortalVO">
+	 <select id="selectMyTenantServiceList" parameterType="String" resultType="TenantSvcVO">
 	 	/*PortalMapper.selectUserInfo 나의 테넌트에서 신청한 서비스 목록 조회 bnso*/
-	 	select * from t_tenant_svc tts
+<!-- 	 	select * from t_tenant_svc tts -->
+		SELECT A.TENANT_ID
+		     , A.SVC_ID 
+		     , B.SVC_NM_KOR 
+		     , C.FARE_SE_CODE
+		     , E.CODE_NM_KOR AS FARE_SE_CODE_NM
+		     , A.FARE_AMOUNT
+		     , IFNULL(DATE_FORMAT(A.COL, '%Y-%m-%d'), '') AS START_DT
+		     , IFNULL(DATE_FORMAT(CASE WHEN C.FARE_UNIT_CODE = 'C015001' THEN DATE_ADD(A.COL, INTERVAL 1 YEAR) 
+		                               WHEN C.FARE_UNIT_CODE = 'C015002' THEN DATE_ADD(A.COL, INTERVAL 1 MONTH) 
+		                               ELSE NULL END, '%Y-%m-%d'), '') AS END_DT
+		     , C.FARE_UNIT_CODE 
+		     , A.USE_AT 
+		  FROM T_TENANT_SVC A
+		 INNER JOIN T_SVC_MASTER B
+		    ON A.SVC_ID = B.SVC_ID 
+		 INNER JOIN T_SVC_FARE C
+		    ON A.SVC_ID = C.SVC_ID 
+		   AND A.FARE_CODE = C.FARE_CODE 
+		 INNER JOIN T_TENANT_USER D
+		    ON A.TENANT_ID = D.TENANT_ID 
+		  LEFT OUTER JOIN T_CMMN_BASIS_CODE E
+		    ON C.FARE_SE_CODE = E.CODE 
+		 WHERE D.USER_NO = #{userNo}
 	 </select>
 	 
 	 <select id="selectServiceList" parameterType="String" resultType="ServiceFareVO">
@@ -224,4 +289,31 @@
 		) 	
 	 </insert>
 	  
+	  <update id="updateUserInfo">
+  	      UPDATE T_USER_INFORMATION
+  	         SET PASSWORD = #{password}
+  	           , USER_NAME = #{userName}
+  	           , TEL_NO = #{telNo}
+  	           , UPDT_ID = #{userId}
+  	           , UPDT_DT = SYSDATE()
+  	           , UPDT_IP = #{creatIp}
+  	       WHERE USER_NO = #{userNo}
+	  </update>
+	  
+	  <update id="updateTenantInfo">
+		  UPDATE T_TENANT
+			 SET TENANT_CL = #{tenantCl}
+			   , TENANT_DTL_CL = #{tenantDtlCl}
+			   , TENANT_NM_KOR = #{tenantNmKor}
+			   , TENANT_NM_ENG = #{tenantNmEng}
+			   , ZIP_NO = #{zipNo}
+			   , ADDRESS = #{address}
+			   , REPRSNT_TELNO = #{reprsntTelno}
+			   , CHARGER_MOBILE = #{chargerMobile}
+			   , CHARGER_NM = #{chargerNm}
+			   , UPDT_ID = #{userId}
+			   , UPDT_DT = SYSDATE()
+			   , UPDT_IP = #{creatIp}
+		   WHERE TENANT_ID = #{tenantId}
+	  </update>
 </mapper>

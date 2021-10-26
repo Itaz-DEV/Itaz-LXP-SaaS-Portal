@@ -67,8 +67,9 @@ public class PortalServiceImpl implements PortalService{
 		return portalMapper.selectMyTenantList(portalVO);
 	}
 	
-	public List<PortalVO> selectMyTenantServiceList(PortalVO portalVO){
-		return portalMapper.selectMyTenantServiceList(portalVO);
+	public List<TenantSvcVO> selectMyTenantServiceList(PortalVO portalVO){
+		List<TenantSvcVO> tenantSvcVO = portalMapper.selectMyTenantServiceList(portalVO);
+		return tenantSvcVO;
 	}
 
 	public List<ServiceFareVO> selectServiceList(String svcId) {
@@ -85,6 +86,40 @@ public class PortalServiceImpl implements PortalService{
 
 	public void tenantServiceInsert(TenantSvcVO tenantSvcVO) {
 		portalMapper.tenantServiceInsert(tenantSvcVO);
+	}
+
+	public void insertTenantInfo(PortalVO portalVO) {
+		portalMapper.insertTenantInfo(portalVO);
+		portalMapper.insertTenantUser(portalVO);
+	}
+
+	public int passwordCheck(PortalVO portalVO) {
+		int isSuccess = 0;
+		try {
+			//비밀번호 암호화해서 유저 정보 조회 
+			PortalVO userVO = portalMapper.selectUserInfo(portalVO);
+			
+			if(passwordEncoder.matches(portalVO.getPassword(), userVO.getPassword())) {
+				isSuccess = 1;		// 성공
+			}
+			
+		}catch(Exception e) {
+			return isSuccess = 2;	//오류
+		}
+		
+		return isSuccess;
+	}
+
+	public void updateUserInformation(HttpServletRequest request, PortalVO portalVO) {
+		portalVO.setPassword(passwordEncoder.encode(portalVO.getPassword()));
+		portalMapper.updateUserInfo(portalVO);
+		
+		PortalVO loginVO = portalMapper.selectUserInfo(portalVO);
+		request.getSession().setAttribute("loginVO", loginVO);
+	}
+
+	public void updateTenantInfo(PortalVO portalVO) {
+		portalMapper.updateTenantInfo(portalVO);		
 	}
 	
 }

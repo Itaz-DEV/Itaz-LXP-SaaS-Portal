@@ -8,25 +8,44 @@
 <!-- start: HEAD -->
 
 <head>
+	<style>
+		.label-required {
+			color: red;
+		}
+	</style>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script type="text/javascript">
+	<script th:inline="javascript">
+		$.fn.serializeObject = function() {
+		    "use strict"
+		    var result = {}
+		    var extend = function(i, element) {
+		        var node = result[element.name]
+		        if ("undefined" !== typeof node && node !== null) {
+		            if ($.isArray(node)) {
+		                node.push(element.value)
+		            } else {
+		                result[element.name] = [node, element.value]
+		            }
+		        } else {
+		            result[element.name] = element.value
+		        }
+		    }
+	
+		    $.each(this.serializeArray(), extend)
+		    return result
+		}
 		$(document).ready(function(){
-
-			//아이디(이메일) 중복 체크
+			/*<![CDATA[*/
+			var tenant = /*[[${tenant}]]*/ 'default';
+			/*]]*/
+			if (tenant) {
+				$("#tenantCl").val(tenant.tenantCl);
+				tenantDtlClSelect();
+			}
+			
 			$("#tenantCl").change(function(){
-				$.ajax({
-					url: "/tenantDetailClList",
-					method: "GET",
-					dataType: "json",
-					data : {"tenantCl":$("#tenantCl").val()},
-					success: function (cdoeList) {
-						let html='<option value="">테넌트 상세 분류를 선택해주세요.</option>';
-						$.each(cdoeList, function(i, data){
-							html += '<option value='+ data.code +'>' + data.codeNmKor + "</option>"; 
-						});
-						$("#tenantDtlCl").empty().append(html);
-					}
-				});
+				$("#tenantDtlCl").val("");
+				tenantDtlClSelect();
 			});
 			
 			//우편번호 검색
@@ -39,9 +58,94 @@
 					}
 				}).open();
 			});
+			
+			$("#saveBtn").click(function() {
+				if (validationChk()) {
+					$ ("form[name=tenantForm]").attr("action", "/tenant/insert").submit();	
+				}
+			});
+			
+			$("#updateBtn").click(function() {
+				if (validationChk()) {
+					let disabledComp = $("form[name=tenantForm] *").find(":disabled").removeAttr("disabled");
+					let updateData = $("form[name=tenantForm]").serializeObject();
+					disabledComp.attr("disabled", true);
+					
+					$.ajax({
+	    				url: "/tenant/update",
+	    				data: JSON.stringify(updateData),
+	    				type: "POST",
+	    				dataType: "json",
+	    				contentType: 'application/json'
+	    			}).done(function (res) {
+	    				alert(res.message);
+	    				window.location.href = "/mypage"
+	    			}).fail(function(res, status, error) {
+	    				alert(res.responseJSON.message);
+	    			});
+				}
+			});
+			
+			function tenantDtlClSelect() {
+				$.ajax({
+					url: "/tenantDetailClList",
+					method: "GET",
+					dataType: "json",
+					data : {"tenantCl":$("#tenantCl").val()},
+					success: function (cdoeList) {
+						let html='<option value="">테넌트 상세 분류를 선택해주세요.</option>';
+						$.each(cdoeList, function(i, data){
+							html += '<option value='+ data.code +'>' + data.codeNmKor + "</option>"; 
+						});
+						$("#tenantDtlCl").empty().append(html);
+						
+						if (tenant && tenant.tenantCl == $("#tenantCl").val()) {
+							$("#tenantDtlCl").val(tenant.tenantDtlCl);
+						} else {
+							tenant.tenantDtlCl = "";
+						}
+					}
+				});
+			}
+			
+			function validationChk() {
+				if(!$.trim($("#tenantCl").val())){
+					alert("테넌트 분류를 선택해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#tenantDtlCl").val())){
+					alert("테넌트 상세 분류를 선택해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#tenantNmKor").val())){
+					alert("테넌트 국문명을 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#tenantReprsntId").val())){
+					alert("테넌트 대표 아이디를 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#chargerNm").val())){
+					alert("테넌트 담당자 명을 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#chargerId").val())){
+					alert("테넌트 담당자 ID를 입력해주세요.");
+					return false;
+				}
+				
+				if(!$.trim($("#chargerMobile").val())){
+					alert("테넌트 담당자 휴대전화번호 를 입력해주세요.");
+					return false;
+				}
+				return true;
+			}
 		});
-		
-
 	</script>
 </head>
 <!-- end: HEAD -->
@@ -53,60 +157,62 @@
         <!--s: section-->
         <section>
             <div class="subVisual">
-                <h1>테넌트 생성</h1>
+                <h1 th:if="${tenant}">테넌트 상세</h1>
+                <h1 th:unless="${tenant}">테넌트 생성</h1>
             </div>
             <div class="subWrap">
                 <div class="subContainer">
-                    <form>
+                    <form name="tenantForm" method="POST">
+                    	<input type="hidden" name="tenantId" th:value="${tenant?.tenantId}"/>
                         <div class="form-group">
-                            <label for="">테넌트 분류</label>
+                            <label for="">테넌트 분류 <span class="label-required">*</span></label>
                             <select class="form-control" name="tenantCl" id="tenantCl">
-                                <option>테넌트 분류를 선택해주세요.</option>
+                                <option value="">테넌트 분류를 선택해주세요.</option>
                             	<option  th:each="item : ${tenantClList}" th:value="${item.code}" th:text="${item.codeNmKor}"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 상세 분류</label>
+                            <label for="">테넌트 상세 분류 <span class="label-required">*</span></label>
                             <select class="form-control" name="tenantDtlCl" id="tenantDtlCl">
-                                <option>테넌트 상세 분류를 선택해주세요.</option>
+                                <option value="">테넌트 상세 분류를 선택해주세요.</option>
                             	<option  th:each="item : ${tenantDivList}" th:value="${item.code}" th:text="${item.codeNmKor}"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 국문명</label>
-                            <input type="text" class="form-control" id="tenantNmKor">
+                            <label for="">테넌트 국문명 <span class="label-required">*</span></label>
+                            <input type="text" class="form-control" id="tenantNmKor" name="tenantNmKor" th:value="${tenant?.tenantNmKor}">
                         </div>
                         <div class="form-group">
                             <label for="">테넌트 영문명</label>
-                            <input type="text" class="form-control" id="tenantNmKor">
+                            <input type="text" class="form-control" id="tenantNmEng" name="tenantNmEng" th:value="${tenant?.tenantNmEng}">
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 대표 아이디 ( 테넌트 서브 도메인 사용 )</label>
-                            <input type="text" class="form-control" id="tenantNmKor">
+                            <label for="">테넌트 대표 아이디 ( 테넌트 서브 도메인 사용 ) <span class="label-required">*</span></label>
+                            <input type="text" class="form-control" id="tenantReprsntId" name="tenantReprsntId" th:value="${tenant?.tenantReprsntId}" th:disabled="${tenant}">
                         </div>
                         <div class="form-group check-form">
                             <label for="">테넌트 주소</label>
-                            <input type="text" class="form-control" style="width:200px;" id="zipNo" name="zipNo">
+                            <input type="text" class="form-control" style="width:200px;" id="zipNo" name="zipNo" th:value="${tenant?.zipNo}">
                             <button type="button" class="btn purpleBtn" id="searchPostCode">주소찾기</button>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="address" name="address">
+                            <input type="text" class="form-control" id="address" name="address" th:value="${tenant?.address}">
                         </div>
                         <div class="form-group">
                             <label for="">대표 전화번호</label>
-                            <input type="text" class="form-control" id="reprsntTelNo" name="reprsntTelNo">
+                            <input type="text" class="form-control" id="reprsntTelno" name="reprsntTelno" th:value="${tenant?.reprsntTelno}">
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 담당자 명</label>
-                            <input type="text" class="form-control" id="chargerNm" name="chargerNm">
+                            <label for="">테넌트 담당자 명 <span class="label-required">*</span></label>
+                            <input type="text" class="form-control" id="chargerNm" name="chargerNm" th:value="${tenant?.chargerNm}">
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 담당자 ID</label>
-                            <input type="text" class="form-control" id="chargerId" name="chargerId">
+                            <label for="">테넌트 담당자 ID <span class="label-required">*</span></label>
+                            <input type="text" class="form-control" id="chargerId" name="chargerId" th:value="${tenant?.chargerId}" th:disabled="${tenant}">
                         </div>
                         <div class="form-group">
-                            <label for="">테넌트 담당자 휴대전화번호</label>
-                            <input type="text" class="form-control" id="chargerMobile" name="chargerMobile">
+                            <label for="">테넌트 담당자 휴대전화번호 <span class="label-required">*</span></label>
+                            <input type="text" class="form-control" id="chargerMobile" name="chargerMobile" th:value="${tenant?.chargerMobile}">
                         </div>
                        <!-- <div class="form-group check-form">
                             <label for="">휴대폰 번호</label>
@@ -118,7 +224,8 @@
                             <button type="" class="btn purpleBtn">인증번호 확인</button>
                         </div> -->
                         <div class="btnWrap">
-                            <button type="button" class="btn purpleBtn" id="saveBtn">테넌트 생성</button>
+                            <button type="button" class="btn purpleBtn" id="saveBtn" th:if="${#lists.isEmpty(tenant)}">테넌트 생성</button>
+                            <button type="button" class="btn purpleBtn" id="updateBtn" th:unless="${#lists.isEmpty(tenant)}">테넌트 수정</button>
                             <button type="button" class="btn blackBtn" id="cancalBtn">취소</button>
                         </div>
 
