@@ -10,6 +10,12 @@
 	<script th:inline="javascript">
 		$(document).ready(function(){
 			var passwordChk = 0;
+			var url = document.location.toString();
+			
+		  	if (url.match('#')) {
+			    $('.nav-pills a[href="#' + url.split('#')[1] + '"]').tab('show');
+		  	}
+			  
 			$("#createTenant").click(function(){
 				window.location.href="/tenant";
 			});

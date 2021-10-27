@@ -77,8 +77,10 @@
         				contentType: 'application/json'
         			}).done(function (res) {
         				alert(res.message);
+        				window.location.href = "/mypage#tab03";
         			}).fail(function(res, status, error) {
         				alert(res.responseJSON.message);
+        				window.location.href = "/mypage#tab03";
         			});
     			}
     		});

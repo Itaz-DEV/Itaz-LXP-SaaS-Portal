@@ -354,7 +354,7 @@ public class PortalController {
 		portalVO.setCreatIp(this.getIp(request));
 		
 		portalService.insertTenantInfo(portalVO);
-        return "redirect:/mypage";
+        return "redirect:/mypage#tab02";
     }
 	
 	/**
