@@ -41,6 +41,7 @@ public class TenantSvcVO {
 	
 	private String startDt; //사용시작기간
 	private String endDt; //사용종료기간
+	private String useStatus; //사용상태
 	
 	private String creatId;
 	private String creatIp;

@@ -167,27 +167,43 @@
 <!-- 	 	select * from t_tenant_svc tts -->
 		SELECT A.TENANT_ID
 		     , A.SVC_ID 
-		     , B.SVC_NM_KOR 
-		     , C.FARE_SE_CODE
-		     , E.CODE_NM_KOR AS FARE_SE_CODE_NM
+		     , A.SVC_NM_KOR 
+		     , A.FARE_SE_CODE
+		     , A.FARE_SE_CODE_NM
 		     , A.FARE_AMOUNT
-		     , IFNULL(DATE_FORMAT(A.COL, '%Y-%m-%d'), '') AS START_DT
-		     , IFNULL(DATE_FORMAT(CASE WHEN C.FARE_UNIT_CODE = 'C015001' THEN DATE_ADD(A.COL, INTERVAL 1 YEAR) 
-		                               WHEN C.FARE_UNIT_CODE = 'C015002' THEN DATE_ADD(A.COL, INTERVAL 1 MONTH) 
-		                               ELSE NULL END, '%Y-%m-%d'), '') AS END_DT
-		     , C.FARE_UNIT_CODE 
+		     , A.START_DT
+		     , A.END_DT
+		     , A.FARE_UNIT_CODE 
 		     , A.USE_AT 
-		  FROM T_TENANT_SVC A
-		 INNER JOIN T_SVC_MASTER B
-		    ON A.SVC_ID = B.SVC_ID 
-		 INNER JOIN T_SVC_FARE C
-		    ON A.SVC_ID = C.SVC_ID 
-		   AND A.FARE_CODE = C.FARE_CODE 
-		 INNER JOIN T_TENANT_USER D
-		    ON A.TENANT_ID = D.TENANT_ID 
-		  LEFT OUTER JOIN T_CMMN_BASIS_CODE E
-		    ON C.FARE_SE_CODE = E.CODE 
-		 WHERE D.USER_NO = #{userNo}
+		     , CASE WHEN A.USE_AT = 0 THEN 0 -- 미사용
+		            WHEN A.USE_AT = 1 AND A.START_DT IS NOT NULL AND DATEDIFF(A.END_DT, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')) &gt; 0 THEN 1 -- 사용중
+		            WHEN A.USE_AT = 1 AND A.START_DT IS NOT NULL AND DATEDIFF(A.END_DT, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')) &lt; 0 THEN 2 -- 만료
+		            ELSE 3 END AS USE_STATUS
+		  FROM (
+		           SELECT A.TENANT_ID
+				        , A.SVC_ID 
+				        , B.SVC_NM_KOR 
+				        , C.FARE_SE_CODE
+				        , E.CODE_NM_KOR AS FARE_SE_CODE_NM
+				        , A.FARE_AMOUNT
+				        , IFNULL(DATE_FORMAT(A.COL, '%Y-%m-%d'), '') AS START_DT
+				        , IFNULL(DATE_FORMAT(CASE WHEN C.FARE_UNIT_CODE = 'C015001' THEN DATE_ADD(A.COL, INTERVAL 1 YEAR) 
+				                                  WHEN C.FARE_UNIT_CODE = 'C015002' THEN DATE_ADD(A.COL, INTERVAL 1 MONTH) 
+				                                  ELSE NULL END, '%Y-%m-%d'), '') AS END_DT
+				        , C.FARE_UNIT_CODE 
+				        , A.USE_AT 
+				     FROM T_TENANT_SVC A
+				    INNER JOIN T_SVC_MASTER B
+				       ON A.SVC_ID = B.SVC_ID 
+				    INNER JOIN T_SVC_FARE C
+				       ON A.SVC_ID = C.SVC_ID 
+				      AND A.FARE_CODE = C.FARE_CODE 
+				    INNER JOIN T_TENANT_USER D
+				       ON A.TENANT_ID = D.TENANT_ID 
+				     LEFT OUTER JOIN T_CMMN_BASIS_CODE E
+				       ON C.FARE_SE_CODE = E.CODE 
+				    WHERE D.USER_NO = #{userNo}
+		       ) A
 	 </select>
 	 
 	 <select id="selectServiceList" parameterType="String" resultType="ServiceFareVO">

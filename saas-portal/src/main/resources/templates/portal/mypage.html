@@ -223,9 +223,20 @@
 				                                                    <th:block th:text="${tenantService.startDt != ''?('(' + tenantService.startDt + ' ~ ' + tenantService.endDt + ')'):''}"></th:block>
 				                                                </td>
 <!-- 				                                                <td class="column4"><p class="blackText">800,000</p></td> -->
-				                                                <td class="column4">
-				                                                    <p class="redText">만료</p><button class="btn redBtn">연장/업그레이드</button>
-				                                                </td>
+																<th:block th:switch=${tenantService.useStatus}>
+																	<td class="column4" th:case="0">
+					                                                    <p class="redText">미사용</p>
+					                                                </td>
+					                                                <td class="column4" th:case="1">
+					                                                    <p class="redText">사용</p><!-- <button class="btn redBtn">업그레이드</button> -->
+					                                                </td>
+																	<td class="column4" th:case="2">
+					                                                    <p class="redText">만료</p><!-- <button class="btn redBtn">연장/업그레이드</button> -->
+					                                                </td>
+					                                                <td class="column4" th:case="3">
+					                                                    <p class="redText">-</p>
+					                                                </td>
+																</th:switch>
 <!-- 				                                                <td class="column5"><button class="btn lineBtn">매뉴얼 다운로드</button></td> -->
 				                                            </tr>
 				                                        </tbody>
