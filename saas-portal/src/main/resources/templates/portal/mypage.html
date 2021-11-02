@@ -103,6 +103,9 @@
 			window.location.href = '/tenant?tenantId=' + tenantId;
 		}
 
+		function tenantAdminPage() {
+			window.open("http://localhost:9090");
+		}
 
 	</script>
     <style>
@@ -197,6 +200,8 @@
 				                                                <th class="column2">테넌트 명</th>
 				                                                <th class="column3">테넌트 대표 아이디</th>
 				                                                <th class="column4">테넌트 담당자 명</th>
+				                                                <th class="column4">승인 여부</th>
+				                                                <th class="column5"></th>
 				                                                <th class="column5"></th>
 				                                            </tr>
 				                                        </thead>
@@ -206,7 +211,9 @@
 				                                                <td class="column2" th:text="${tenant.tenantNmKor}"></td>
 				                                                <td class="column3" th:text="${tenant.tenantReprsntId}"></td>
 				                                                <td class="column4" th:text="${tenant.chargerNm}"></td>
-				                                                <td class="column5"><button class="btn whiteBtn" th:onclick="tenantDetail([[${tenant.tenantId}]])">테넌트 바로가기</button></td>
+				                                                <td class="column4" th:text="${tenant.confmSttusNm}"></td>
+				                                                <td class="column5"><button class="btn whiteBtn" th:onclick="tenantDetail([[${tenant.tenantId}]])">상세보기</button></td>
+				                                                <td class="column5"><button class="btn " style="background-color: blue; color: white;" th:onclick="tenantAdminPage()">관리자로그인</button></td>
 				                                            </tr>
 				                                        </tbody>
 				                                    </table>

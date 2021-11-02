@@ -9,22 +9,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PortalVO {
-	 
+
     private String code;
     private String codeNmKor;
 
     //사용자 정보
-    @NotBlank(groups = {ValidationGroups.insert.class}) 
+    @NotBlank(groups = {ValidationGroups.insert.class})
     private String userId;
-    @NotBlank(groups = {ValidationGroups.insert.class}) 
+    @NotBlank(groups = {ValidationGroups.insert.class})
     private String password;
 	private String telNo;
-	@NotBlank(groups = {ValidationGroups.insert.class}) 
+	@NotBlank(groups = {ValidationGroups.insert.class})
 	private String userName;
 	private String creatIp;
 	private String userNo;
-	
-	
+
+
 	private String tenantId; 			//테넌트 아이디
 	private String tenantCl;			//테넌트 분류
 	private String tenantClNm;			//테넌트 분류명
@@ -40,4 +40,6 @@ public class PortalVO {
 	private String chargerId;			//테넌트 담당자 아이디
 	private String chargerNm;			//테넌트 담당자 명
 	private String chargerMobile;		//테넌트 담당자 휴대전화번호
+	private String confmSttus;
+	private String confmSttusNm;
 }
