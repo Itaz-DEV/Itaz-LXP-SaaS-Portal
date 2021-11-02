@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" 
+<html lang="ko"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
@@ -12,14 +12,14 @@
 		    <div class="container">
 		        <div class="logo"><a th:href="@{/main}"><img src="/img/logo.png" /></a></div>
 		        <ul class="pc_menu">
-		            <li><a href="#service">서비스 소개</a></li>
-		            <li><a href="#price">도입 비용</a></li>
+		            <li><a href="/main#service">서비스 소개</a></li>
+		            <li><a href="/main#price">도입 비용</a></li>
 		        </ul>
 		        <div class="mo_menu">
 		            <div class="close_btn"><img src="/img/close_btn.png" /></div>
 		            <ul class="">
-		                <li><a href="#service">서비스 소개</a></li>
-		                <li><a href="#price">도입 비용</a></li>
+		                <li><a href="/main#service">서비스 소개</a></li>
+		                <li><a href="/main#price">도입 비용</a></li>
 		            </ul>
 		        </div>
 		        <th:block th:if="${session.isEmpty()}">
@@ -36,14 +36,14 @@
 		         </th:block>
 		    </div>
 		</header>
-		
+
        	<th:block layout:fragment="content"></th:block>
-       	
-       	<form action="/logout" method="get" name="defaultForm" id="defaultForm"> 
+
+       	<form action="/logout" method="get" name="defaultForm" id="defaultForm">
        	</form>
-		
+
 		<div class="pageTop"><a href="#"><img src="/img/arrow_img.png"></a></div>
-		
+
 	</div>
 	<!-- 怨듯넻 Footer
 	<th:block th:replace="fragments/commonFooter :: commonFooter"></th:block> -->

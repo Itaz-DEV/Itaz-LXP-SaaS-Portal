@@ -61,11 +61,11 @@
 	 </select>
 
 	 <insert id="insertTenantInfo" parameterType="PortalVO">
-	 
+
 		<selectKey keyProperty="tenantId" resultType="string" order="BEFORE">
 	        SELECT uuid() as tenantId
 	    </selectKey>
-	    
+
 		INSERT INTO T_TENANT
 		(
 			 TENANT_ID
@@ -99,9 +99,9 @@
 			,#{chargerNm}
 		)
 	</insert>
-	
+
 	<insert id="insertTenantUser">
-		INSERT INTO T_TENANT_USER 
+		INSERT INTO T_TENANT_USER
 		(
 		      USER_NO
 			, TENANT_ID
@@ -132,7 +132,7 @@
 		    , #{creatIp}
 		)
 	 </insert>
-	 
+
 	 <select id="selectMyTenantList" parameterType="String" resultType="PortalVO">
 	 	/*PortalMapper.selectMyTenantList 나의 테넌트 목록 조회 bnso*/
 		select
@@ -166,51 +166,51 @@
 	 	/*PortalMapper.selectUserInfo 나의 테넌트에서 신청한 서비스 목록 조회 bnso*/
 <!-- 	 	select * from t_tenant_svc tts -->
 		SELECT A.TENANT_ID
-		     , A.SVC_ID 
-		     , A.SVC_NM_KOR 
+		     , A.SVC_ID
+		     , A.SVC_NM_KOR
 		     , A.FARE_SE_CODE
 		     , A.FARE_SE_CODE_NM
 		     , A.FARE_AMOUNT
 		     , A.START_DT
 		     , A.END_DT
-		     , A.FARE_UNIT_CODE 
-		     , A.USE_AT 
+		     , A.FARE_UNIT_CODE
+		     , A.USE_AT
 		     , CASE WHEN A.USE_AT = 0 THEN 0 -- 미사용
 		            WHEN A.USE_AT = 1 AND A.START_DT IS NOT NULL AND DATEDIFF(A.END_DT, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')) &gt; 0 THEN 1 -- 사용중
 		            WHEN A.USE_AT = 1 AND A.START_DT IS NOT NULL AND DATEDIFF(A.END_DT, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')) &lt; 0 THEN 2 -- 만료
 		            ELSE 3 END AS USE_STATUS
 		  FROM (
 		           SELECT A.TENANT_ID
-				        , A.SVC_ID 
-				        , B.SVC_NM_KOR 
+				        , A.SVC_ID
+				        , B.SVC_NM_KOR
 				        , C.FARE_SE_CODE
 				        , E.CODE_NM_KOR AS FARE_SE_CODE_NM
 				        , A.FARE_AMOUNT
 				        , IFNULL(DATE_FORMAT(A.COL, '%Y-%m-%d'), '') AS START_DT
-				        , IFNULL(DATE_FORMAT(CASE WHEN C.FARE_UNIT_CODE = 'C015001' THEN DATE_ADD(A.COL, INTERVAL 1 YEAR) 
-				                                  WHEN C.FARE_UNIT_CODE = 'C015002' THEN DATE_ADD(A.COL, INTERVAL 1 MONTH) 
+				        , IFNULL(DATE_FORMAT(CASE WHEN C.FARE_UNIT_CODE = 'C015001' THEN DATE_ADD(A.COL, INTERVAL 1 YEAR)
+				                                  WHEN C.FARE_UNIT_CODE = 'C015002' THEN DATE_ADD(A.COL, INTERVAL 1 MONTH)
 				                                  ELSE NULL END, '%Y-%m-%d'), '') AS END_DT
-				        , C.FARE_UNIT_CODE 
-				        , A.USE_AT 
+				        , C.FARE_UNIT_CODE
+				        , A.USE_AT
 				     FROM T_TENANT_SVC A
 				    INNER JOIN T_SVC_MASTER B
-				       ON A.SVC_ID = B.SVC_ID 
+				       ON A.SVC_ID = B.SVC_ID
 				    INNER JOIN T_SVC_FARE C
-				       ON A.SVC_ID = C.SVC_ID 
-				      AND A.FARE_CODE = C.FARE_CODE 
+				       ON A.SVC_ID = C.SVC_ID
+				      AND A.FARE_CODE = C.FARE_CODE
 				    INNER JOIN T_TENANT_USER D
-				       ON A.TENANT_ID = D.TENANT_ID 
+				       ON A.TENANT_ID = D.TENANT_ID
 				     LEFT OUTER JOIN T_CMMN_BASIS_CODE E
-				       ON C.FARE_SE_CODE = E.CODE 
+				       ON C.FARE_SE_CODE = E.CODE
 				    WHERE D.USER_NO = #{userNo}
 		       ) A
 	 </select>
-	 
+
 	 <select id="selectServiceList" parameterType="String" resultType="ServiceFareVO">
 	 	/*PortalMapper.selectServiceList 메인페이지 서비스 과금 조회 gjahn*/
 	 	SELECT A.SVC_ID
-		     , A.SVC_SE_CODE 
-		     , A.SVC_ATRB_CODE 
+		     , A.SVC_SE_CODE
+		     , A.SVC_ATRB_CODE
 		     , B.FARE_SE_CODE
 		     , B.FARE_SE_CODE_NM
 		     , B.YEAR_ACCOUNT
@@ -219,57 +219,57 @@
 		 INNER JOIN (
 		                SELECT SA.SVC_ID
 		                     , SA.FARE_SE_CODE
-		                     , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM 
+		                     , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM
 		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015002' THEN SA.FARE_ACCOUNT ELSE 0 END) AS MONTH_ACCOUNT
 		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015001' THEN SA.FARE_ACCOUNT ELSE 0 END) AS YEAR_ACCOUNT
 		                     , MAX(SB.SORT_NO) AS SORT_NO
 		                  FROM T_SVC_FARE SA
-		                 INNER JOIN T_CMMN_BASIS_CODE SB 
-		                    ON SA.FARE_SE_CODE = SB.CODE 
+		                 INNER JOIN T_CMMN_BASIS_CODE SB
+		                    ON SA.FARE_SE_CODE = SB.CODE
 		                 WHERE SVC_ID = #{svcId}
 		                 GROUP BY SVC_ID, FARE_SE_CODE
 		            ) B
 		    ON A.SVC_ID = B.SVC_ID
 		 ORDER BY B.SORT_NO
 	 </select>
-	 
+
 	 <select id="selectMyTenantComboList" parameterType="String" resultType="PortalVO">
 	 	/*PortalMapper.selectMyTenantComboList 서비스결제 테넌트 콤보조회 gjahn*/
 	 	SELECT A.TENANT_ID
 			 , A.TENANT_NM_KOR
-		  FROM T_TENANT A 
-		 INNER JOIN T_TENANT_USER B 
-		    ON A.TENANT_ID = B.TENANT_ID 
-		 INNER JOIN T_USER_INFORMATION C 
-		    ON B.USER_NO = C.USER_NO 
+		  FROM T_TENANT A
+		 INNER JOIN T_TENANT_USER B
+		    ON A.TENANT_ID = B.TENANT_ID
+		 INNER JOIN T_USER_INFORMATION C
+		    ON B.USER_NO = C.USER_NO
 		 WHERE C.USER_ID = #{userId}
 	 </select>
-	 
+
 	 <select id="selectServiceFareList" parameterType="String" resultType="TenantSvcVO">
 	 	/*PortalMapper.selectServiceList 메인페이지 서비스 과금 조회 gjahn*/
 	 	SELECT A.SVC_ID
-		     , A.SVC_SE_CODE 
-		     , A.SVC_ATRB_CODE 
-		     , B.FARE_SE_CODE 
+		     , A.SVC_SE_CODE
+		     , A.SVC_ATRB_CODE
+		     , B.FARE_SE_CODE
 		     , B.FARE_CODE
 		     , C.CODE_NM_KOR AS FARE_SE_CODE_NM
-		     , B.FARE_UNIT_CODE 
+		     , B.FARE_UNIT_CODE
 		     , D.CODE_NM_KOR AS FARE_UNIT_CODE_NM
-		     , B.FARE_ACCOUNT AS FARE_AMOUNT 
+		     , B.FARE_ACCOUNT AS FARE_AMOUNT
 		  FROM T_SVC_MASTER A
 		 INNER JOIN T_SVC_FARE B
 		    ON A.SVC_ID = B.SVC_ID
-		 INNER JOIN T_CMMN_BASIS_CODE C 
+		 INNER JOIN T_CMMN_BASIS_CODE C
 		    ON B.FARE_SE_CODE = C.CODE
 		 INNER JOIN T_CMMN_BASIS_CODE D
 		    ON B.FARE_UNIT_CODE = D.CODE
 		 WHERE A.SVC_ID = #{svcId}
 		 ORDER BY B.FARE_SE_CODE, B.FARE_UNIT_CODE
 	 </select>
-	 
+
 	 <insert id="tenantServiceInsert">
 	 	/*PortalMapper.tenantServiceIns 서비스결제 저장 gjahn*/
-	 	INSERT INTO T_TENANT_SVC 
+	 	INSERT INTO T_TENANT_SVC
 		(
 		      TENANT_ID
 		    , SVC_ID
@@ -302,9 +302,9 @@
 		    , #{creatId}
 		    , sysdate()
 		    , #{creatIp}
-		) 	
+		)
 	 </insert>
-	  
+
 	  <update id="updateUserInfo">
   	      UPDATE T_USER_INFORMATION
   	         SET PASSWORD = #{password}
@@ -315,7 +315,7 @@
   	           , UPDT_IP = #{creatIp}
   	       WHERE USER_NO = #{userNo}
 	  </update>
-	  
+
 	  <update id="updateTenantInfo">
 		  UPDATE T_TENANT
 			 SET TENANT_CL = #{tenantCl}
@@ -324,6 +324,7 @@
 			   , TENANT_NM_ENG = #{tenantNmEng}
 			   , ZIP_NO = #{zipNo}
 			   , ADDRESS = #{address}
+			   , REPRSNT_EMAIL = #{reprsntEmail}
 			   , REPRSNT_TELNO = #{reprsntTelno}
 			   , CHARGER_MOBILE = #{chargerMobile}
 			   , CHARGER_NM = #{chargerNm}
