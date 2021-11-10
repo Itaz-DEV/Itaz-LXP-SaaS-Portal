@@ -11,12 +11,12 @@
     		$(".subscribe_btn").click(function () {
     			let svcId = $(this).attr("data-svcid");
     			let fareSeCode = $(this).attr("data-faresecode");
-    			
+
     			/*<![CDATA[*/
     			var session = /*[[${session}]]*/ 'default';
     			/*]]*/
     			if ($.isEmptyObject(session)) $(".joinPop").modal("show");
-    			else window.location.href = "/service/payment?svcId=" + svcId + "&fareSeCode=" + fareSeCode; 
+    			else window.location.href = "/service/payment?svcId=" + svcId + "&fareSeCode=" + fareSeCode;
     	    });
     	});
     </script>
@@ -64,7 +64,7 @@
             </div>
             <div class="bottomCon" id="price">
                 <div class="container">
-                    <h1 class="bottomTitle">도입 비용 안내</h1>
+                    <h1 class="bottomTitle">서비스 신청 안내</h1>
                     <ul class="bottomBox clearfix">
                     	<li th:each="serviceFare : ${serviceFareList}" th:class="${serviceFare.fareSeCode=='C014005'?'on':''}">
                     		<div class="priceRibbon" th:if="${serviceFare.fareSeCode=='C014005'}">
@@ -87,11 +87,11 @@
                                 <span class="optionText">(연간 결제시 할인 적용)</span>
                             </div>
                             <div class="priceBtn" style="z-index:1;position:relative">
-                                <button th:class="${'btn subscribe_btn ' + (serviceFare.fareSeCode=='C014005' ? 'purpleBtn' : 'whiteBtn')}" 
+                                <button th:class="${'btn subscribe_btn ' + (serviceFare.fareSeCode=='C014005' ? 'purpleBtn' : 'whiteBtn')}"
                                 	th:data-svcid="${serviceFare.svcId}" th:data-faresecode="${serviceFare.fareSeCode}">서비스 신청</button>
                             </div>
                         </li>
-                    	<!-- 
+                    	<!--
                         <li>
                             <div class="priceTitle">
                                 <h2>베이직</h2>
@@ -150,12 +150,12 @@
                     </ul>
                 </div>
             </div>
-            
+
         </section>
         <!--e : section-->
 
         <div class="overlay"></div>
-            
+
         <div class="modal fade joinPop" tabindex="-1" role="dialog" aria-labelledby="joinPop" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
