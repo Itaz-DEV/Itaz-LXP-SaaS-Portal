@@ -101,6 +101,7 @@
 			,#{chargerMobile}
 			,#{chargerId}
 			,#{chargerNm}
+			,'C033001'			/*승인대기*/
 			,#{userId}
 		    ,SYSDATE()
 		    ,#{creatIp}
@@ -221,22 +222,23 @@
 		     , B.YEAR_ACCOUNT
 		     , B.MONTH_ACCOUNT
 		     , B.ADIT_INOF1 AS PERSON_CNT_INFO
-		  FROM T_SVC_MASTER A
-		 INNER JOIN (
-		                SELECT SA.SVC_ID
-		                     , SA.FARE_SE_CODE
-		                     , SA.FARE_UNIT_CODE
-		                     , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM
-		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015002' THEN SA.FARE_ACCOUNT ELSE 0 END) AS MONTH_ACCOUNT
-		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015001' THEN SA.FARE_ACCOUNT ELSE 0 END) AS YEAR_ACCOUNT
-		                     , MAX(SB.SORT_NO) AS SORT_NO
-		                     , SB.ADIT_INOF1
-		                  FROM T_SVC_FARE SA
-		                 INNER JOIN T_CMMN_BASIS_CODE SB
-		                    ON SA.FARE_SE_CODE = SB.CODE
-		                 WHERE SVC_ID = #{svcId}
-		                 GROUP BY SVC_ID, FARE_SE_CODE
-		            ) B
+		 FROM T_SVC_MASTER A
+		 INNER JOIN
+		 (
+             SELECT SA.SVC_ID
+                  , SA.FARE_SE_CODE
+                  , SA.FARE_UNIT_CODE
+                  , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM
+                  , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015002' THEN SA.FARE_ACCOUNT ELSE 0 END) AS MONTH_ACCOUNT
+                  , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015001' THEN SA.FARE_ACCOUNT ELSE 0 END) AS YEAR_ACCOUNT
+                  , MAX(SB.SORT_NO) AS SORT_NO
+                  , SB.ADIT_INOF1
+              FROM T_SVC_FARE SA
+              INNER JOIN T_CMMN_BASIS_CODE SB
+                 ON SA.FARE_SE_CODE = SB.CODE
+              WHERE SVC_ID = #{svcId}
+              GROUP BY SVC_ID, FARE_SE_CODE
+         ) B
 		    ON A.SVC_ID = B.SVC_ID
 		 ORDER BY B.SORT_NO
 	 </select>

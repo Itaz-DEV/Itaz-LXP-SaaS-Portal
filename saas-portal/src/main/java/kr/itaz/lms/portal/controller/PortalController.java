@@ -63,7 +63,7 @@ public class PortalController {
 		}
 
 		//일단 정책이 정해지지 않아 서비스 한개를 박아놓음
-		List<ServiceFareVO> serviceFareList = portalService.selectServiceList("S0201002");
+		List<ServiceFareVO> serviceFareList = portalService.selectServiceList("S0203001");
 		model.addAttribute("serviceFareList", serviceFareList);
 
         return "portal/main";
