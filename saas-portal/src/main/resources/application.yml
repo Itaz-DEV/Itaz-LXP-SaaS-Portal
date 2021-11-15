@@ -101,7 +101,7 @@ greeting:
 token:
   expiration:
     time: 86400000 #token 만료시간
-secret:  itazUserToken #token 암복호화 키
+  secret:  itazUserToken #token 암복호화 키
 
 ---
 spring: 

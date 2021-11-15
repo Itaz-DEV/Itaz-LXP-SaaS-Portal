@@ -12,6 +12,8 @@ public class ServiceFareVO {
 	private String fareSeCode;
 	private String fareSeCodeNm;
 	private String fareUnit;
+	private String fareUnitCode;
 	private Integer yearAccount;
 	private Integer monthAccount;
+	private String personCntInfo;
 }

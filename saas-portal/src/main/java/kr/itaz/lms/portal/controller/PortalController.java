@@ -55,8 +55,9 @@ public class PortalController {
 	 */
 	@GetMapping("/main")
     public String main(HttpServletRequest request, Model model) {
+
 		PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
-		System.out.println("request Session :: " + request.getSession().getAttribute("loginVO"));
+
 		if(loginVO != null){
 			System.out.println("request Session  getUserId:: " + loginVO.getUserId());
 		}

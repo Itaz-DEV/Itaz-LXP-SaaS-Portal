@@ -81,6 +81,10 @@
 			 ,CHARGER_MOBILE
 			 ,CHARGER_ID
 			 ,CHARGER_NM
+			 ,CONFM_STTUS
+			 ,CREAT_ID
+			 ,CREAT_DT
+			 ,CREAT_IP
 		)
 		VALUES
 		(
@@ -97,6 +101,9 @@
 			,#{chargerMobile}
 			,#{chargerId}
 			,#{chargerNm}
+			,#{userId}
+		    ,SYSDATE()
+		    ,#{creatIp}
 		)
 	</insert>
 
@@ -112,9 +119,6 @@
 			, CREAT_ID
 			, CREAT_DT
 			, CREAT_IP
-			, UPDT_ID
-			, UPDT_DT
-			, UPDT_IP
 		)
 		VALUES
 		(
@@ -124,9 +128,6 @@
 		    , 1
 		    , 0
 		    , NULL
-		    , #{userId}
-		    , SYSDATE()
-		    , #{creatIp}
 		    , #{userId}
 		    , SYSDATE()
 		    , #{creatIp}
@@ -214,18 +215,22 @@
 	 	SELECT A.SVC_ID
 		     , A.SVC_SE_CODE
 		     , A.SVC_ATRB_CODE
+		     ,B.FARE_UNIT_CODE
 		     , B.FARE_SE_CODE
 		     , B.FARE_SE_CODE_NM
 		     , B.YEAR_ACCOUNT
 		     , B.MONTH_ACCOUNT
+		     , B.ADIT_INOF1 AS PERSON_CNT_INFO
 		  FROM T_SVC_MASTER A
 		 INNER JOIN (
 		                SELECT SA.SVC_ID
 		                     , SA.FARE_SE_CODE
+		                     , SA.FARE_UNIT_CODE
 		                     , MAX(SB.CODE_NM_KOR) as FARE_SE_CODE_NM
 		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015002' THEN SA.FARE_ACCOUNT ELSE 0 END) AS MONTH_ACCOUNT
 		                     , MAX(CASE WHEN SA.FARE_UNIT_CODE = 'C015001' THEN SA.FARE_ACCOUNT ELSE 0 END) AS YEAR_ACCOUNT
 		                     , MAX(SB.SORT_NO) AS SORT_NO
+		                     , SB.ADIT_INOF1
 		                  FROM T_SVC_FARE SA
 		                 INNER JOIN T_CMMN_BASIS_CODE SB
 		                    ON SA.FARE_SE_CODE = SB.CODE
