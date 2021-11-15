@@ -101,7 +101,7 @@ public class PortalController {
 
 		//일단 정책이 정해지지 않아 서비스 한개를 박아놓음
 		//과금
-		List<TenantSvcVO> serviceFareList = portalService.selectServiceFareList("S0201002");
+		List<TenantSvcVO> serviceFareList = portalService.selectServiceFareList("S0203001");
 
 		model.addAttribute("serviceFareList", serviceFareList);
 		model.addAttribute("tenantList", tenantList);

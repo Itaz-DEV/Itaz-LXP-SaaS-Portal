@@ -38,37 +38,37 @@
 	<script th:inline="javascript">
     	$(document).ready(function(){
     		setAccountData();
-    		
+
     		$("input[type=radio][name='options']").change(function () {
     			setAccountData();
     	    });
-    		
+
     		$("button[name='paymentType']").click(function () {
     			$(".selectBtnColor").removeClass("selectBtnColor");
-    			
+
     			$(this).addClass("selectBtnColor");
     		});
-    		
+
     		$(document).on('click', '#creditCard, #acTrans', function () {
     			$(".selectBtnColor").removeClass("selectBtnColor");
     			$(this).addClass("selectBtnColor");
-    		});		
-    		
+    		});
+
     		$("#paymentBtn").click(function () {
     			var tenantId = $("#tenantId").val();
-    			
+
     			if (!tenantId) {
     				alert("테넌트를 선택해주세요");
     			} else {
-    				/*<![CDATA[*/
-        			var svcId = /*[[${svcId}]]*/ 'default';
-    				var serviceFareList = /*[[${serviceFareList}]]*/ 'default';
-        			/*]]*/
+
+        			var svcId =  [[${svcId}]];
+    				var serviceFareList = [[${serviceFareList}]];
+
     				let thisIdx = $("input[type=radio][name=options]:checked").attr("data-idx");
         			let fareData = serviceFareList[thisIdx];
         			fareData.tenantId = tenantId;
         			fareData.useAt = 0;
-        			
+
         			$.ajax({
         				url: "/service/insert",
         				data: JSON.stringify(fareData),
@@ -84,13 +84,13 @@
         			});
     			}
     		});
-    		
+
     		function setAccountData() {
     			/*<![CDATA[*/
 				var serviceFareList = /*[[${serviceFareList}]]*/ 'default';
     			/*]]*/
     			var amount = serviceFareList[$("input[type=radio][name=options]:checked").attr("data-idx")].fareAmount;
-        		
+
         		$("#sumAccount").text(String(Math.ceil(amount*0.9)).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') + "원");
         		$("#tax").text(String(Math.ceil(amount/10)).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') + "원");
         		$("#reaultAccount").text(String(amount).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') + "원");
@@ -146,27 +146,27 @@
 	                    <ul class="clearfix">
 	                    	<li class="radio" th:each="fareCode, index : ${serviceFareList}">
 	                            <label>
-	                                <input type="radio" name="options" id="optionsRadios" th:value="${fareCode.fareCode}" 
-	                                	th:text="${fareCode.fareSeCodeNm}" th:checked="${fareCode.fareSeCode == selFareSeCode}" th:data-idx="${index.index}">  
+	                                <input type="radio" name="options" id="optionsRadios" th:value="${fareCode.fareCode}"
+	                                	th:text="${fareCode.fareSeCodeNm}" th:checked="${fareCode.fareSeCode == selFareSeCode}" th:data-idx="${index.index}">
 	                                <p th:text="${#numbers.formatInteger(fareCode.fareAmount, 3, 'COMMA') + '원 / ' + fareCode.fareUnitCodeNm}"/>
 	                            </label>
 	                        </li>
 	                    	<!--
 	                        <li class="radio">
 	                            <label>
-	                                <input type="radio" name="options" id="optionsRadios" value="option" checked> 연장안함 
+	                                <input type="radio" name="options" id="optionsRadios" value="option" checked> 연장안함
 	                                <p class="">30,000원 / 월</p>
 	                            </label>
 	                        </li>
 	                        <li class="radio">
 	                            <label>
-	                                <input type="radio" name="options" id="optionsRadios" value="option"> 1개월 (정기결제) 
+	                                <input type="radio" name="options" id="optionsRadios" value="option"> 1개월 (정기결제)
 	                                <p class="lineTwo"><span class="fake">30,000원</span><br><span class="redText">28,000원</span> / 월</p>
 	                            </label>
 	                        </li>
 	                        <li class="radio">
 	                            <label>
-	                                <input type="radio" name="options" id="optionsRadios" value="option"> 1년 (정기결제) 
+	                                <input type="radio" name="options" id="optionsRadios" value="option"> 1년 (정기결제)
 	                                <p class="lineTwo"><span class="fake">360,000원</span><br><span class="redText">300,000원</span> / 월
 	                            </label>
 	                        </li>
