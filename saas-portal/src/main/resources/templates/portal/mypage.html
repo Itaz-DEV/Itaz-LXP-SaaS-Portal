@@ -159,7 +159,7 @@
 									                <div class="subContainer" id="joinContainer">
 									                    <form name="joinForm" method="POST">
 									                    	<input type="hidden" name="duplicateYn" id="duplicateYn" value="N"/>
-									                         <div class="form-group">
+									                        <div class="form-group">
 									                            <label for="userId">아이디(이메일)</label>
 									                            <input type="text" class="form-control" id="userId" name="userId" disabled th:value="${session.loginVO.userId}">
 									                        </div>
@@ -176,7 +176,7 @@
 									                            <label for="passwordConfirm">변경 패스워드 확인</label>
 									                            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="변경 패스워드를 입력하세요." disabled>
 									                        </div>
-								                           <div class="form-group">
+								                            <div class="form-group">
 									                            <label for="userId">이름</label>
 									                            <input type="text" class="form-control" id="userName" name="userName" th:value="${session.loginVO.userName}" disabled>
 									                        </div>
@@ -201,7 +201,7 @@
 				                                                <th class="column3">테넌트 대표 아이디</th>
 				                                                <th class="column4">테넌트 담당자 명</th>
 				                                                <th class="column4">승인 여부</th>
-				                                                <th class="column5"></th>
+				                                                <th class="column5">상세</th>
 				                                                <th class="column5"></th>
 				                                            </tr>
 				                                        </thead>
@@ -213,7 +213,7 @@
 				                                                <td class="column4" th:text="${tenant.chargerNm}"></td>
 				                                                <td class="column4" th:text="${tenant.confmSttusNm}"></td>
 				                                                <td class="column5"><button class="btn whiteBtn" th:onclick="tenantDetail([[${tenant.tenantId}]])">상세보기</button></td>
-				                                                <td class="column5"><button class="btn " style="background-color: blue; color: white;" th:onclick="tenantAdminPage()">관리자로그인</button></td>
+				                                                <td class="column5"><button th:if="${#strings.equals(tenant.confmSttus, 'C033002')}"class="btn " style="background-color: blue; color: white;" th:onclick="tenantAdminPage()">관리자로그인</button></td>
 				                                            </tr>
 				                                        </tbody>
 				                                    </table>

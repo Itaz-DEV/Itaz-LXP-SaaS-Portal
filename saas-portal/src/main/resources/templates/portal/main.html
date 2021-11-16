@@ -65,88 +65,36 @@
             <div class="bottomCon" id="price">
                 <div class="container">
                     <h1 class="bottomTitle">서비스 신청 안내</h1>
-                    <ul class="bottomBox clearfix">
-                    	<li th:each="serviceFare : ${serviceFareList}" th:class="${serviceFare.fareSeCode=='C014005'?'on':''}">
-                    		<div class="priceRibbon" th:if="${serviceFare.fareSeCode=='C014005'}">
-                                <div class="ribbonText">추천</div>
-                            </div>
+                    <ul class="bottomBox clearfix" style="display:flex">
+                    	<li th:each="serviceFare : ${serviceFareList}">
                             <div class="priceTitle">
                                 <h2 th:text="${serviceFare.fareSeCodeNm}"></h2>
-                                <!-- 표시할수있는 데이터가 없어서 시안 보고 하드코딩 -->
-                                <p th:if="${serviceFare.fareSeCode=='C014004'}">비대면 학습 진행을 위한 LMS<br>&nbsp;</p>
-                                <p th:if="${serviceFare.fareSeCode=='C014005'}">대면/비대면 학습 통합관리<br>&nbsp;</p>
-                                <p th:if="${serviceFare.fareSeCode=='C014006'}">대면/비대면 학습 통합관리<br>(+지능형 중도 탈락 위험 감지)</p>
                             </div>
-                            <div class="price" th:if="${serviceFare.monthAccount} and ${serviceFare.monthAccount != 0}">
-                                <p><b th:text="${#numbers.formatInteger(serviceFare.monthAccount, 3, 'COMMA') + '원'}"></b> <span>/ 월</span></p>
-                            </div>
-                            <div class="discount">
-                            	<!-- 표시할수있는 데이터가 없어서 시안 금액 보고 연간 비용에 20퍼 곱해 만들어 표시 -->
-                                <span class="beforePrice" th:text="${#numbers.formatInteger((serviceFare.yearAccount*1.2), 3, 'COMMA') + '원'}"></span>
-                                <p><b th:text="${#numbers.formatInteger(serviceFare.yearAccount, 3, 'COMMA') + '원'}"></b> / 년</p>
-                                <span class="optionText">(연간 결제시 할인 적용)</span>
-                            </div>
+                            <th:block th:if="${#strings.equals(serviceFare.fareUnitCode, 'C015002')}">
+	                            <div class="price" th:if="${serviceFare.monthAccount == 0}">
+	                                <p>0원</b> <span>/ 월</span></p>
+	                            </div>
+	                            <div class="price" th:if="${serviceFare.monthAccount != 0}">
+	                                <p><b th:text="${#numbers.formatInteger(serviceFare.monthAccount, 3, 'COMMA') + '원'}"></b> <span>/ 월</span></p>
+	                            </div>
+                            </th:block>
+                            <th:block th:if="${#strings.equals(serviceFare.fareUnitCode, 'C015001')}">
+	                            <div class="price" th:if="${serviceFare.yearAccount == 0}">
+	                            	<!-- 표시할수있는 데이터가 없어서 시안 금액 보고 연간 비용에 20퍼 곱해 만들어 표시 -->
+	                                <p><b  style="font-size:2.5rem" th:text="${0 + '원'}"></b> / 년</p>
+	                                <span class="optionText" th:text="${'인원 : ' + serviceFare.personCntInfo}"></span>
+	                            </div>
+
+	                            <div class="price" th:if="${serviceFare.yearAccount != 0}">
+	                                <p><b  style="font-size:2.5rem" th:text="${#numbers.formatInteger(serviceFare.yearAccount, 3, 'COMMA') + '원'}"></b> / 년</p>
+	                                <span class="optionText" th:text="${'인원 : ' + serviceFare.personCntInfo}"></span>
+	                            </div>
+                            </th:block>
                             <div class="priceBtn" style="z-index:1;position:relative">
-                                <button th:class="${'btn subscribe_btn ' + (serviceFare.fareSeCode=='C014005' ? 'purpleBtn' : 'whiteBtn')}"
+                                <button th:class="${'btn subscribe_btn whiteBtn'}"
                                 	th:data-svcid="${serviceFare.svcId}" th:data-faresecode="${serviceFare.fareSeCode}">서비스 신청</button>
                             </div>
                         </li>
-                    	<!--
-                        <li>
-                            <div class="priceTitle">
-                                <h2>베이직</h2>
-                                <p>비대면 학습 진행을 위한 LMS<br>&nbsp;</p>
-                            </div>
-                            <div class="price">
-                                <p><b>990,000</b> <span>/ 월</span></p>
-                            </div>
-                            <div class="discount">
-                                <span class="beforePrice">11,880,000원</span>
-                                <p><b>9,900,000 원</b> / 년</p>
-                                <span class="optionText">(연간 결제시 할인 적용)</span>
-                            </div>
-                            <div class="priceBtn">
-                                <button class="btn whiteBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
-                            </div>
-                        </li>
-                        <li class="on">
-                            <div class="priceRibbon">
-                                <div class="ribbonText">추천</div>
-                            </div>
-                            <div class="priceTitle">
-                                <h2>스탠다드</h2>
-                                <p>대면/비대면 학습 통합관리<br>&nbsp;</p>
-                            </div>
-                            <div class="price">
-                                <p><b>1,490,000</b> <span>/ 월</span></p>
-                            </div>
-                            <div class="discount">
-                                <span class="beforePrice">17,880,000원</span>
-                                <p><b>14,900,000 원</b> / 년</p>
-                                <span class="optionText">(연간 결제시 할인 적용)</span>
-                            </div>
-                            <div class="priceBtn">
-                                <button class="btn purpleBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="priceTitle">
-                                <h2>프리미엄</h2>
-                                <p>대면/비대면 학습 통합관리<br>(+지능형 중도 탈락 위험 감지)</p>
-                            </div>
-                            <div class="price">
-                                <p><b>1,990,000</b> <span>/ 월</span></p>
-                            </div>
-                            <div class="discount">
-                                <span class="beforePrice">23,880,000원</span>
-                                <p><b>19,900,000 원</b> / 년</p>
-                                <span class="optionText">(연간 결제시 할인 적용)</span>
-                            </div>
-                            <div class="priceBtn">
-                                <button class="btn whiteBtn" data-toggle="modal" data-target=".joinPop">서비스 신청</button>
-                            </div>
-                        </li>
-                        -->
                     </ul>
                 </div>
             </div>

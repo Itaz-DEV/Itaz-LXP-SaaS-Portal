@@ -55,14 +55,15 @@ public class PortalController {
 	 */
 	@GetMapping("/main")
     public String main(HttpServletRequest request, Model model) {
+
 		PortalVO loginVO = (PortalVO) request.getSession().getAttribute("loginVO");
-		System.out.println("request Session :: " + request.getSession().getAttribute("loginVO"));
+
 		if(loginVO != null){
 			System.out.println("request Session  getUserId:: " + loginVO.getUserId());
 		}
 
 		//일단 정책이 정해지지 않아 서비스 한개를 박아놓음
-		List<ServiceFareVO> serviceFareList = portalService.selectServiceList("S0201002");
+		List<ServiceFareVO> serviceFareList = portalService.selectServiceList("S0203001");
 		model.addAttribute("serviceFareList", serviceFareList);
 
         return "portal/main";
@@ -100,7 +101,7 @@ public class PortalController {
 
 		//일단 정책이 정해지지 않아 서비스 한개를 박아놓음
 		//과금
-		List<TenantSvcVO> serviceFareList = portalService.selectServiceFareList("S0201002");
+		List<TenantSvcVO> serviceFareList = portalService.selectServiceFareList("S0203001");
 
 		model.addAttribute("serviceFareList", serviceFareList);
 		model.addAttribute("tenantList", tenantList);
