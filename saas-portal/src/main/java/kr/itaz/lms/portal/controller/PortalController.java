@@ -378,7 +378,7 @@ public class PortalController {
 
 		try {
 			portalService.tenantServiceInsert(tenantSvcVO);
-			messageMap.put("message", "서비스 결제가 완료되었습니다.");
+			messageMap.put("message", "서비스 신청이 완료되었습니다.");
 		} catch (DuplicateKeyException e) {
 			messageMap.put("message", "이미 등록된 서비스입니다.");
 			return new ResponseEntity<Map>(messageMap, HttpStatus.INTERNAL_SERVER_ERROR);
