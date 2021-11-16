@@ -56,7 +56,7 @@ spring:
     activate:
       on-profile: "prod" 
   datasource:
-    url: jdbc:mariadb://211.236.48.204:3306/itz_lxp
+    url: jdbc:mariadb://172.27.0.72:3306/itz_lxp
     driver-class-name: org.mariadb.jdbc.Driver
     username: webadm
     password: itaz9045
@@ -101,7 +101,7 @@ greeting:
 token:
   expiration:
     time: 86400000 #token 만료시간
-secret:  itazUserToken #token 암복호화 키
+  secret:  itazUserToken #token 암복호화 키
 
 ---
 spring: 
