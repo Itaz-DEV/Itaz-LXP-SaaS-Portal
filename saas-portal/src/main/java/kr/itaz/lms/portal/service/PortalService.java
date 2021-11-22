@@ -8,6 +8,15 @@ import kr.itaz.lms.portal.vo.PortalVO;
 import kr.itaz.lms.portal.vo.ServiceFareVO;
 import kr.itaz.lms.portal.vo.TenantSvcVO;
 
+/**
+ * 서비스포탈 Service
+ * @FileName : PortalService.java
+ * @Project : saas-portal
+ * @Date : 2021. 11. 22.
+ * @작성자 : ITAZ_D
+ * @변경이력 :
+ * @프로그램 설명 :
+ */
 public interface PortalService {
 
 	/**
@@ -20,8 +29,8 @@ public interface PortalService {
 	 * @param code
 	 * @return
 	 */
-	public List<PortalVO> selectCommCodeList(String code);
-	
+	List<PortalVO> selectCommCodeList(String code);
+
 	/**
 	 * 회원가입 입력
 	 * @Method Name : insertUserInformation
@@ -31,150 +40,150 @@ public interface PortalService {
 	 * @Method 설명 :
 	 * @param portalVO
 	 */
-	public void insertUserInformation(PortalVO portalVO);
-	
+	void insertUserInformation(PortalVO portalVO);
+
 	/**
 	 * 회원정보 수정
 	 * @Method Name : updateUserInformation
 	 * @작성일 : 2021. 10. 21.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public void updateUserInformation(HttpServletRequest request, PortalVO portalVO);
-	
+	void updateUserInformation(HttpServletRequest request, PortalVO portalVO);
+
 	/**
 	 * 이메일 중복체크 여부
 	 * @Method Name : selectCheckUuplicateEmail
 	 * @작성일 : 2021. 10. 16.
 	 * @작성자 : itaz-bnso
 	 * @변경이력 : 2021. 10. 16.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param userId
 	 * @return
 	 */
-	public int selectCheckDuplicateEmail(String userId);
-	
+	int selectCheckDuplicateEmail(String userId);
+
 	/**
-	 * 
+	 *
 	 * @Method Name : login
 	 * @작성일 : 2021. 10. 16.
 	 * @작성자 : itaz-bnso
 	 * @변경이력 : 2021. 10. 16.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public int login(HttpServletRequest request, PortalVO portalVO);
-	
+	int login(HttpServletRequest request, PortalVO portalVO);
+
 	/**
 	 * 테넌트 등록
 	 * @Method Name : insertTenantInfo
 	 * @작성일 : 2021. 10. 25.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 25.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public void insertTenantInfo(PortalVO portalVO);
-	
+	void insertTenantInfo(PortalVO portalVO);
+
 	/**
 	 * 테넌트 수정
 	 * @Method Name : updateTenantInfo
 	 * @작성일 : 2021. 10. 25.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 25.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public void updateTenantInfo(PortalVO portalVO);
-	
+	void updateTenantInfo(PortalVO portalVO);
+
 	/**
 	 * 나의 테넌트 정보
 	 * @Method Name : selectMyTenantInfo
 	 * @작성일 : 2021. 10. 17.
 	 * @작성자 : itaz-bnso
 	 * @변경이력 : 2021. 10. 17.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public List<PortalVO> selectMyTenantList(PortalVO portalVO);
-	
+	List<PortalVO> selectMyTenantList(PortalVO portalVO);
+
 	/**
 	 * 나의 테넌트에서 신청한 서비스 목록
 	 * @Method Name : selectMyTenantServiceList
 	 * @작성일 : 2021. 10. 17.
 	 * @작성자 : itaz-bnso
 	 * @변경이력 : 2021. 10. 17.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param portalVO
 	 * @return
 	 */
-	public List<TenantSvcVO> selectMyTenantServiceList(PortalVO portalVO);
-	
+	List<TenantSvcVO> selectMyTenantServiceList(PortalVO portalVO);
+
 	/**
 	 * 서비스 과금 목록
 	 * @Method Name : selectMyTenantServiceList
 	 * @작성일 : 2021. 10. 20.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 20.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param svcId
 	 * @return
 	 */
-	public List<ServiceFareVO> selectServiceList(String svcId);
-	
+	List<ServiceFareVO> selectServiceList(String svcId);
+
 	/**
 	 * 테넌트 정보
 	 * @Method Name : selectMyTenantList
 	 * @작성일 : 2021. 10. 21.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param userId
 	 * @return
 	 */
-	public List<PortalVO> selectMyTenantList(String userId);
-	
+	List<PortalVO> selectMyTenantList(String userId);
+
 	/**
 	 * 서비스 과금 단위 정보
 	 * @Method Name : selectServiceFareList
 	 * @작성일 : 2021. 10. 21.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param svcId
 	 * @return
 	 */
-	public List<TenantSvcVO> selectServiceFareList(String svcId);
-	
+	List<TenantSvcVO> selectServiceFareList(String svcId);
+
 	/**
 	 * 테넌트 서비스 등록
 	 * @Method Name : tenantServiceInsert
 	 * @작성일 : 2021. 10. 21.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param tenantSvcVO
 	 * @return
 	 */
-	public void tenantServiceInsert(TenantSvcVO tenantSvcVO);
-	
+	void tenantServiceInsert(TenantSvcVO tenantSvcVO);
+
 	/**
 	 * 비밀번호 확인
 	 * @Method Name : passwordCheck
 	 * @작성일 : 2021. 10. 21.
 	 * @작성자 : gjahn56
 	 * @변경이력 : 2021. 10. 21.
-	 * @Method 설명 : 
+	 * @Method 설명 :
 	 * @param userId
 	 * @return
 	 */
-	public int passwordCheck(PortalVO portalVO);
-	
+	int passwordCheck(PortalVO portalVO);
+
 }

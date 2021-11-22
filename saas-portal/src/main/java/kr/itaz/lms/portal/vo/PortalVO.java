@@ -14,12 +14,12 @@ public class PortalVO {
     private String codeNmKor;
 
     //사용자 정보
-    @NotBlank(groups = {ValidationGroups.insert.class})
+    @NotBlank(groups = {ValidationGroups.Insert.class})
     private String userId;
-    @NotBlank(groups = {ValidationGroups.insert.class})
+    @NotBlank(groups = {ValidationGroups.Insert.class})
     private String password;
 	private String telNo;
-	@NotBlank(groups = {ValidationGroups.insert.class})
+	@NotBlank(groups = {ValidationGroups.Insert.class})
 	private String userName;
 	private String creatIp;
 	private String userNo;
