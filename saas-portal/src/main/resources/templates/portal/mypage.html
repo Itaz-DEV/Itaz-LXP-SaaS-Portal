@@ -55,8 +55,9 @@
 
 			//내 정보 수정
 			$("#updateUserInfo").click(function() {
+				var pw = $("#password").val();
 				var data = {
-					password: $("#password").val(),
+					password: pw,
 					userName: $("#userName").val(),
 					telNo: $("#telNo").val()
 				};
@@ -77,6 +78,36 @@
 					alert("패스워드가 맞지 않습니다. \n확인 후 다시 입력해주세요.");
 					return false;
 				}
+				
+				//비밀번호 유효성 체크
+				//!최소 10자리 이상 : 하나의 문자종류로 구성한 경우
+				//!최소 8자리 이상 : 두 종류 이상의 문자를 이용하여 구성한 경우
+				if(pw.length < 10 && !/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-]).{8,25}$/.test(pw) && !/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/.test(pw) && !/^(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(pw)){
+			        alert('비밀번호는 10자리 이상 또는 숫자, 영문자, 특수문자(!@#$%^*+=-) 중 두 가지 이상의 조합으로 8자리 이상 사용해야 합니다.');
+			        return false;
+			    }
+				
+				// 연속된 숫자 문자, 키보드배열 사용 불가
+				if(checkPwForm(pw, "")){
+				    alert('비밀번호는 4회이상의 연속된 숫자 및 문자, 키보드 상에서 나란히 있는 문자열을 사용할 수 없습니다.');
+					return false;
+				}
+				
+				if(/(\w)\1\1\1/.test(pw)){
+			        alert('같은 문자를 4번 이상 사용하실 수 없습니다.');
+			        return false;
+			    } 
+				
+				//비밀번호가 휴대폰 번호와 4자리 이상 일치하는 경우
+				if($.trim($("#telNo").val()) && checkPwForm(pw, "hp")){
+				    alert('비밀번호는 휴대폰 번호와 4자리 이상 일치하는 경우 사용할 수 없습니다.');
+					return false;
+				}
+				
+				if(pw.search($("#userId").val()) > -1 || pw.search($("#userId").val()) > -1){
+			        alert("비밀번호에 아이디가 포함되었습니다.");
+			        return false;
+			    }
 
 				if(!$.trim(userName)){
 					alert("이름을 입력해주세요.");
@@ -97,6 +128,39 @@
 					alert("수정에 문제가 발생했습니다.");
 				});
 			});
+			
+			function checkPwForm(str, type){
+				var max = 4; // 3자리 이상 검사
+				var i, j, k, x, y;
+				var buff = [];
+				
+				if (type === "hp") {
+					buff = [$("#telNo").val()];
+				} else {
+					buff = ["0123456789", "9876543210", "abcdefghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ","qwertyuiopasdfghjklzxcvbnm","QWERTYUIOPASDFGHJKLZXCVBNM"];	
+				}
+				var scr, src2, ptn = "";
+
+				for(i = 0; i < buff.length; i++){
+					src = buff[i];
+					src2 = buff[i] + buff[i];
+	
+					for(j = 0; j < src.length; j++){
+						x = src.substr(j, 1);
+						y = src2.substr(j, max);
+						ptn += "["+x+"]{"+max+",}|";
+						ptn += y+"|";
+					}
+
+				}
+
+				ptn = new RegExp(ptn.replace(/.$/, ""));
+
+				if(ptn.test(str)) return true;
+
+				return false;
+
+			}
 		});
 
 		function tenantDetail(tenantId) {
